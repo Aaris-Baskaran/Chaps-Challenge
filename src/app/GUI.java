@@ -14,27 +14,25 @@ import javax.swing.JPanel;
  */
 public class GUI {
 	JFrame frame = new JFrame("Chap's Challenge");
-	JPanel panel = new JPanel();
-	
-	JPanel panel2 = new JPanel();
+	JPanel designPanel = new JPanel();	
+	JPanel gamePanel = new JPanel();
 	
 	/**
 	 * Constructor
 	 */
 	public GUI() {
 		
+		gamePanel.setBackground(Color.GREEN);
+		gamePanel.setBounds(0, 0, 600, 600);
 		
-		panel2.setBackground(Color.GREEN);
-		//panel2.setPreferredSize(new Dimension(300,300));
+		Color bg = Color.CYAN.darker();
+		designPanel.setBackground(bg);
+		designPanel.setBounds(700, 0, 300, 600);
 		
-		panel2.setBounds(0, 0, 600, 600);
-		panel.setBackground(Color.BLACK);
-		//panel.setPreferredSize(new Dimension(700,700));
-		panel.setBounds(700, 0, 300, 600);
 		frame.setSize(new Dimension(900,600));
-		//frame.setLayout(new GridLayout(1,2));
-		frame.add(panel2);
-		frame.add(panel);
+		frame.setResizable(false);
+		frame.add(gamePanel);
+		frame.add(designPanel);
 		frame.setVisible(true);
 		
 	}
