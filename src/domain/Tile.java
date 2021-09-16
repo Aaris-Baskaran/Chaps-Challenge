@@ -9,12 +9,11 @@ package domain;
  */
 public abstract class Tile {
 	
-	private boolean canMove;
+	protected boolean canMove;
 	
 	/**
 	 * Constructor.
 	 */
-	public Tile(boolean canMove) {
-		this.canMove = canMove;
+	public Tile() {
 	}
 }
