@@ -19,4 +19,4 @@ Persistency | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
 Fuzz | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
-Renderer | Stelio Brooky  | @brookystel
+Renderer | Gevin Pua  | @puagevi
