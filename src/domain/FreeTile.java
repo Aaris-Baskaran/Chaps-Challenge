@@ -11,7 +11,5 @@ public class FreeTile extends Tile{
 	/**
 	 * Can move through free tiles
 	 */
-	public FreeTile() {
-		canMove = true;
-	}
+	public FreeTile() { canMove = true; }
 }
