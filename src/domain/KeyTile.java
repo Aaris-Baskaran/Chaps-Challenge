@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.Color;
+
 /**
  * Represents a key
  * 
@@ -8,10 +10,12 @@ package domain;
  */
 public class KeyTile extends Tile {
 
+	private Color color;
 	/**
 	 * Can move onto keys
 	 */
-	public KeyTile() {
+	public KeyTile(Color c) {
+		color = c;
 		canMove = true;
 	}
 }
