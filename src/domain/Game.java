@@ -63,10 +63,10 @@ public class Game {
     /**
      * Loads a level, gets data for the level from persistency module.
      *
-     * @param level the level number
+     * @param levelNum the level number
      */
-    public void loadLevel(int level) {
-        //somehow get level info from persitency module
+    public void loadLevel(int levelNum) {
+        //somehow get level info from persistency module
 
         //Set the level number
         level = 1;
@@ -99,7 +99,49 @@ public class Game {
      * @param direction the direction to move - u, d, l, or r.
      */
     public void move(char direction){
+        //check if move is valid
+        if(isValid(direction)){
+            moveChap(direction);
+        }
 
+    }
+
+    private void moveChap(char direction){
+        int x = chapPos.getX();
+        int y = chapPos.getY();
+
+        if(direction == 'u'){
+            updateMaze(x, y-1, x, y);
+        }
+        else if (direction == 'd'){
+            updateMaze(x, y+1, x, y);
+        }
+        else if (direction == 'l'){
+            updateMaze(x-1, y, x, y);
+        }
+        else if (direction == 'r'){
+            updateMaze(x+1, y, x, y);
+        }
+    }
+
+    private void updateMaze(int a, int b, int chapX, int chapY){
+        chapPos = new Position(a, b);
+        Tile chap = maze[chapY][chapX];
+        setTile(b, a, chap);
+        setTile(chapY, chapX, new FreeTile());
+    }
+
+    private void setTile(int row, int col, Tile tile){
+        maze[row][col] = tile;
+    }
+
+    private boolean isValid(char direction){
+        //check if next tile is a wall
+
+
+        //if next tile is a locked door, check if chap has the key
+
+        return true;
     }
 
     /**
