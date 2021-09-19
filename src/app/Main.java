@@ -1,4 +1,7 @@
 package app;
+
+import java.io.IOException;
+
 /**
  * Main class
  * 
@@ -7,9 +10,8 @@ package app;
  */
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		GUI gui = new GUI();
-
 	}
 
 }
