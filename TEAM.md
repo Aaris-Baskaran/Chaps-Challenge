@@ -12,7 +12,7 @@ Recorder | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
 Persistency | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
-Fuzz | Stelio Brooky  | @brookystel
+Fuzz | Kalem Edlin  | @edlinkale
 -------|-----------------|---------------------------
 Renderer | Gevin Pua  | @puagevi
 
