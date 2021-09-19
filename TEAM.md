@@ -8,7 +8,7 @@ Domain | Aaris Baskaran  | @baskaraari
 -------|-----------------|---------------------------
 App | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
-Recorder | Stelio Brooky  | @brookystel
+Recorder | Maurice Nolan  | @nolanarno1
 -------|-----------------|---------------------------
 Persistency | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
