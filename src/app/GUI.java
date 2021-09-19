@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import domain.Game;
+
 /**
  * Graphic User Interface Class
  * 
@@ -27,6 +29,7 @@ import javax.swing.KeyStroke;
  *
  */
 public class GUI {
+	Game game = new Game();
 	JFrame frame = new JFrame("Chap's Challenge");
 	static JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
@@ -115,29 +118,28 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("up");
+			game.move('u');
 		}		
 	}
 	public class DownAction extends AbstractAction{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("down");
+			game.move('d');
 		}		
 	}
 	public class LeftAction extends AbstractAction{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("left");
+			game.move('l');
 		}		
 	}
 	public class RightAction extends AbstractAction{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("right");
-			changeColour(gamePanel);
+			game.move('r');
 		}		
 	}
 	
