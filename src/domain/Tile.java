@@ -1,5 +1,9 @@
 package domain;
 
+import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.io.IOException;
+
 /**
  * 
  * Abstract tile class.
@@ -15,5 +19,15 @@ public abstract class Tile {
 	 * Constructor.
 	 */
 	public Tile() {
+	}
+
+	protected Image getImage(String fileName) {
+		Image image = null;
+		try {
+			image = ImageIO.read(this.getClass().getResource(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 }

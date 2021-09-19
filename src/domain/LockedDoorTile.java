@@ -1,6 +1,6 @@
 package domain;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Represents a locked door.
@@ -29,5 +29,17 @@ public class LockedDoorTile extends Tile {
 	 */
 	public Color getColor(){
 		return color;
+	}
+
+	/**
+	 * Returns the image for this tile - used in renderer.
+	 *
+	 * @return image
+	 */
+	public Image getImage() {
+		if (color == Color.BLUE){
+			return getImage("BlueLockedDoorTile.png");
+		}
+		return getImage("YellowLockedDoorTile.png");
 	}
 }

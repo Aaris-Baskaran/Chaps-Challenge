@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.*;
+
 /**
  * Represents the exit of the level.
  * 
@@ -12,5 +14,14 @@ public class ExitTile extends Tile{
 	 */
 	public ExitTile() {
 		canMove = true;
+	}
+
+	/**
+	 * Returns the image for this tile - used in renderer.
+	 *
+	 * @return image
+	 */
+	public Image getImage() {
+		return getImage("ExitTile.png");
 	}
 }

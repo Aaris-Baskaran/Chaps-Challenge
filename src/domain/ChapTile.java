@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.*;
+
 /**
  * Represents the player.
  * 
@@ -13,5 +15,28 @@ public class ChapTile extends Tile{
 	 */
 	public ChapTile() {
 		canMove = true;
+	}
+
+	/**
+	 * Returns the image for this tile - used in renderer.
+	 *
+	 * @return image
+	 */
+	public Image getImage() {
+		char dir = Game.getChapDirection();
+
+		//check direction first
+		if(dir == 'u'){
+			return getImage("ChapBackWithMaskTile.png");
+		}
+		else if (dir == 'd'){
+			return getImage("ChapFrontWithMaskTile.png");
+		}
+		else if (dir == 'l'){
+			return getImage("ChapLeftWithMaskTile.png");
+		}
+		else {
+			return getImage("ChapRightWithMaskTile.png");
+		}
 	}
 }

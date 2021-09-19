@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.Image;
+
 /**
  * Represents a chip (treasure).
  * 
@@ -13,5 +15,14 @@ public class ChipTile extends Tile{
 	 */
 	public ChipTile() {
 		canMove = true;
+	}
+
+	/**
+	 * Returns the image for this tile - used in renderer.
+	 *
+	 * @return image
+	 */
+	public Image getImage() {
+		return getImage("TreasureTile.png");
 	}
 }

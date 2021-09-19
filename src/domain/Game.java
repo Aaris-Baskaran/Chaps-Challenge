@@ -47,6 +47,11 @@ public class Game {
     private ArrayList<KeyTile> keys;
 
     /**
+     * The last direction chap moved in - used for displaying the chap tile
+     */
+    private static char chapDirection;
+
+    /**
      * Constructor for the Game.
      */
     public Game() {
@@ -102,8 +107,8 @@ public class Game {
         //check if move is valid
         if(isValid(direction)){
             moveChap(direction);
+            chapDirection = direction;
         }
-
     }
 
     //Moves chap in the specified direction
@@ -226,5 +231,14 @@ public class Game {
      */
     public Tile[][] getMaze() {
         return maze;
+    }
+
+    /**
+     * Return the current direction of chap - for renderer to display the correct chap image
+     *
+     * @return direction
+     */
+    public static char getChapDirection() {
+        return chapDirection;
     }
 }

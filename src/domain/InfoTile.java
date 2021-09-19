@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.*;
+
 /**
  * Represents an info field.
  * 
@@ -13,5 +15,14 @@ public class InfoTile extends Tile{
 	 */
 	public InfoTile() {
 		canMove = true;
+	}
+
+	/**
+	 * Returns the image for this tile - used in renderer.
+	 *
+	 * @return image
+	 */
+	public Image getImage() {
+		return getImage("InfoFieldTile.png");
 	}
 }
