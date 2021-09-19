@@ -6,4 +6,7 @@ package renderer;
  */
 public class Renderer {
 
+	public Renderer() {
+		
+	}
 }
