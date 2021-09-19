@@ -106,6 +106,7 @@ public class Game {
 
     }
 
+    //Moves chap in the specified direction
     private void moveChap(char direction){
         int x = chapPos.getX();
         int y = chapPos.getY();
@@ -124,6 +125,7 @@ public class Game {
         }
     }
 
+    //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
         chapPos = new Position(a, b);
         Tile chap = maze[chapY][chapX];
@@ -131,17 +133,63 @@ public class Game {
         setTile(chapY, chapX, new FreeTile());
     }
 
+    //Updates the specified tile in the maze array
     private void setTile(int row, int col, Tile tile){
         maze[row][col] = tile;
     }
 
+    //Check if the tile in the given direction can we moved onto
     private boolean isValid(char direction){
-        //check if next tile is a wall
+        int x = chapPos.getX();
+        int y = chapPos.getY();
 
+        Tile nextTile;
+        //check direction first
+        if(direction == 'u'){
+            nextTile = maze[y-1][x];
+            checkNextValid(nextTile);
+        }
+        else if (direction == 'd'){
+            nextTile = maze[y+1][x];
+            checkNextValid(nextTile);
+        }
+        else if (direction == 'l'){
+            nextTile = maze[y][x-1];
+            checkNextValid(nextTile);
+        }
+        else if (direction == 'r'){
+            nextTile = maze[y][x+1];
+            checkNextValid(nextTile);
+        }
+
+        //next Tile is not a wall
+        //if next Tile is a locked door, chap as the key
+        return true;
+    }
+
+    //checks if the next tile is a wall, or if its a locked door and chap has the key
+    private boolean checkNextValid(Tile nextTile){
+        //check if next tile is a wall
+        if (nextTile.getClass() == WallTile.class){
+            return false;
+        }
 
         //if next tile is a locked door, check if chap has the key
+        if (nextTile.getClass() == LockedDoorTile.class && !hasKey(nextTile)){
+            return false;
+        }
 
         return true;
+    }
+
+    //checks if chap has the key to a locked door
+    private boolean hasKey(Tile door){
+        for(KeyTile key: keys){
+            if(key.getColor() == ((KeyTile) door).getColor()){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -156,7 +204,7 @@ public class Game {
     /**
      * Get the keys that have been collected.
      *
-     * @return
+     * @return keys
      */
     public ArrayList<KeyTile> getKeys(){
         return keys;
@@ -165,7 +213,7 @@ public class Game {
     /**
      * Get the number of chips remaining on the board.
      *
-     * @return
+     * @return chipsRemaining
      */
     public int getChipsRemaining(){
         return chipsRemaining;
@@ -174,7 +222,7 @@ public class Game {
     /**
      * Get the 2D array containing the maze.
      *
-     * @return
+     * @return maze
      */
     public Tile[][] getMaze() {
         return maze;
