@@ -2,6 +2,7 @@ package app;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -30,7 +31,7 @@ public class GUI {
 	static JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
 	public int count = 10;
-	JLabel label = new JLabel();
+	JLabel timerText = new JLabel();
 	Timer timer;
 	
 	/**
@@ -52,7 +53,7 @@ public class GUI {
 		
 
 		//createDesign();
-		Color bg = Color.CYAN.darker();
+		Color bg = new Color(72, 204, 180);
 		designPanel.setBackground(bg);
 		//designPanel.setBounds(700, 0, 300, 600);
 		designPanel.setLayout(new GridLayout(3,3,20,0));
@@ -67,7 +68,13 @@ public class GUI {
 		fillPanel(designPanel);
 		designPanel.add(picLabel);
 		fillPanel(designPanel);
-		designPanel.add(new JLabel("Timer"));		
+		timerText = new JLabel("Timer:");
+		 Font f = new Font("SansSerif",Font.BOLD,20);
+		    //change a jlabel font color
+		  //set the font to the Jlabel 
+		    timerText.setFont(f);
+		    timerText.setBounds(80,20,250,80);
+		designPanel.add(timerText);		
 		fillPanel(designPanel);
 		designPanel.add(new JLabel(""));		
 				
