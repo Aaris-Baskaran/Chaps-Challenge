@@ -35,10 +35,10 @@ public class Renderer {
 				
 				setBackground(Color.WHITE);
 				
-				for (int i = 0; i < 24; i++) {
-					for (int j = 0; j < 24; j++) {
+				for (int i = 0; i < 10; i++) {
+					for (int j = 0; j < 10; j++) {
 						if (tileList.size() > 0) {
-							Object tile = tileList.get(i*24 + j);
+							Object tile = tileList.get(i*10 + j);
 							g.drawImage((Image) tile, j*20, i*20, 20, 20, this);
 						}
 					}
@@ -69,8 +69,8 @@ public class Renderer {
 	public ArrayList<Object> update(Game game) {
 		ArrayList<Object> updatedList = new ArrayList<Object>();
 		
-		for (int i = 0; i < 24; i++) {
-			for (int j = 0; j < 24; j++) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
 				Tile[][] maze = game.getMaze();
 				Tile tile = maze[j][i];
 				updatedList.add(tile.getImage());
