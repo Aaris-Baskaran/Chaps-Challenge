@@ -20,7 +20,14 @@ public class Renderer {
 	/**
 	 * Renderer constructor
 	 */
-	public Renderer() {
+	public Renderer(Game game) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				Tile[][] maze = game.getMaze();
+				Tile tile = maze[j][i];
+				this.tileList.add(tile.getImage());
+			}
+		}
 		createBoard();
 	}
 	
