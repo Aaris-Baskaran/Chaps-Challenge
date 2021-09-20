@@ -2,6 +2,8 @@ package domain;
 
 import java.util.ArrayList;
 
+import persistency.State;
+
 /**
  * This module is responsible for representing and maintaining the state of the game, 
  * such as what types of objects there are  and which actions are allowed to change 
@@ -60,14 +62,13 @@ public class Game {
     /**
      * Constructor for the Game.
      */
-    public Game() {
+    public Game(State state) {
 
         //Initialise treasure chest and chap's items
         treasureChest = new ArrayList<ChipTile>();
         keys = new ArrayList<KeyTile>();
-
-        //Load level 1
-        loadLevel(1);
+        
+        loadLevel(state);
 
     }
 
@@ -76,24 +77,24 @@ public class Game {
      *
      * @param levelNum the level number
      */
-    public void loadLevel(int levelNum) {
+    public void loadLevel(State state) {
         //somehow get level info from persistency module
 
         //Set the level number
-        level = levelNum;
+        level = state.getLevelNum();
 
         //Set the time allowed for the level
-        maxTime = 60;
+        maxTime = state.getTime();
 
         //Set the total number of chips
-        chipsRemaining = 10;
+        chipsRemaining = state.getChipsLeft();
 
         //Set the maze
-        tempInitMaze();
+        initMaze(state.getMaze());
 
         //Set the position and direction of chap
-        chapPos = new Position(5,5);
-        chapDirection = 'd';
+        chapPos = state.getPos();
+        chapDirection = state.getDir();
 
         //Initialise currentTile
         currentTile = new FreeTile();
@@ -130,6 +131,29 @@ public class Game {
         }
 
         maze[5][5] = new ChapTile();
+    }
+    
+    public void initMaze(String[] input) {
+    	
+    	maze = new Tile[10][10];
+    	
+    	for(int row = 0; row < 10; ++row) {
+    		for(int col = 0; col < 10; ++col) {
+    			char c = input[row].charAt(col);
+    			if(c == 'P') {
+    				maze[row][col] = new ChapTile();
+    			} else {
+    				maze[row][col] = createTile(c, row, col);
+    			}
+    		}
+    	}
+    	
+    }
+    
+    public Tile createTile(char c, int row, int col) {
+    	if(c == '_') return new FreeTile();
+    	if(c == '#') return new WallTile();
+    	return null;
     }
 
 

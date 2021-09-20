@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import domain.Game;
+import persistency.StateManager;
 import renderer.Renderer;
 
 /**
@@ -35,7 +36,8 @@ import renderer.Renderer;
  *
  */
 public class GUI {
-	Game game = new Game();
+	StateManager manager = new StateManager();
+	Game game = new Game(manager.loadState());
 	Renderer r = new Renderer(game);
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
@@ -44,6 +46,7 @@ public class GUI {
 	public int count = 10;
 	JLabel timerText = new JLabel();
 	Timer timer;
+	
 
 	/**
 	 * Actions for keys
