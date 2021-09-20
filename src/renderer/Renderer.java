@@ -46,7 +46,7 @@ public class Renderer {
 					for (int j = 0; j < 10; j++) {
 						if (tileList.size() > 0) {
 							Object tile = tileList.get(i*10 + j);
-							g.drawImage((Image) tile, j*20, i*20, 20, 20, this);
+							g.drawImage((Image) tile, j*60, i*60, 60, 60, this);
 						}
 					}
 				}	
