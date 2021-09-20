@@ -26,7 +26,6 @@ public abstract class Tile {
 	protected Image getImage(String fileName) {
 		Image image = null;
 		try {
-			System.out.println(fileName);
 			image = ImageIO.read(new File(fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
