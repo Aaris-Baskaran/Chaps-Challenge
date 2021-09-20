@@ -37,6 +37,7 @@ public class KeyTile extends Tile {
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		if (color == Color.BLUE){
 			return getImage("BlueKeyTile.png");

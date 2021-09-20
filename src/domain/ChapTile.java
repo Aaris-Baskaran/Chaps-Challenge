@@ -22,6 +22,7 @@ public class ChapTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		char dir = Game.getChapDirection();
 

@@ -21,6 +21,7 @@ public class ExitTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		return getImage("ExitTile.png");
 	}

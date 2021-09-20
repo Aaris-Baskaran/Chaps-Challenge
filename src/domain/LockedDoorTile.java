@@ -36,6 +36,7 @@ public class LockedDoorTile extends Tile {
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		if (color == Color.BLUE){
 			return getImage("BlueLockedDoorTile.png");

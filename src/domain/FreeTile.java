@@ -20,6 +20,7 @@ public class FreeTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		return getImage("FreeTile.png");
 	}

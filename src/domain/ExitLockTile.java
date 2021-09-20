@@ -22,6 +22,7 @@ public class ExitLockTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		return getImage("ExitLockTile.png");
 	}

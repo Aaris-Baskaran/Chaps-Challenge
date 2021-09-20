@@ -22,6 +22,7 @@ public class ChipTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		return getImage("TreasureTile.png");
 	}

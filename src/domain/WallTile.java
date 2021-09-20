@@ -22,6 +22,7 @@ public class WallTile extends Tile{
 	 *
 	 * @return image
 	 */
+	@Override
 	public Image getImage() {
 		return getImage("WallTile.png");
 	}

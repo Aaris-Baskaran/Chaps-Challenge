@@ -21,6 +21,7 @@ public abstract class Tile {
 	public Tile() {
 	}
 
+	//Get image - to be used by only this domain. Helper for the get image in each class
 	protected Image getImage(String fileName) {
 		Image image = null;
 		try {
@@ -29,5 +30,13 @@ public abstract class Tile {
 			e.printStackTrace();
 		}
 		return image;
+	}
+
+	/**
+	 * Returns the image for a tile - used by renderer.
+	 * @return
+	 */
+	public Image getImage(){
+		return getImage("FreeTile.png");
 	}
 }
