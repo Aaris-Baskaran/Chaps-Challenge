@@ -91,8 +91,9 @@ public class Game {
         //Set the maze
         tempInitMaze();
 
-        //Set the position of chap
+        //Set the position and direction of chap
         chapPos = new Position(5,5);
+        chapDirection = 'd';
 
         //Initialise currentTile
         currentTile = new FreeTile();
@@ -127,6 +128,8 @@ public class Game {
                 maze[j][i] = new FreeTile();
             }
         }
+
+        maze[5][5] = new ChapTile();
     }
 
 
