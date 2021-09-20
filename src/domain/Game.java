@@ -20,6 +20,7 @@ public class Game {
     /**
      * The total time allowed for the level
      */
+
     private int maxTime;
     /**
      * The maze, a 2D array of Tiles.
@@ -52,6 +53,11 @@ public class Game {
     private static char chapDirection;
 
     /**
+     * Holds the current tile that chap has stepped over
+     */
+    private Tile currentTile;
+
+    /**
      * Constructor for the Game.
      */
     public Game() {
@@ -74,20 +80,53 @@ public class Game {
         //somehow get level info from persistency module
 
         //Set the level number
-        level = 1;
+        level = levelNum;
 
         //Set the time allowed for the level
+        maxTime = 60;
 
         //Set the total number of chips
+        chipsRemaining = 10;
 
         //Set the maze
+        tempInitMaze();
 
         //Set the position of chap
+        chapPos = new Position(5,5);
+
+        //Initialise currentTile
+        currentTile = new FreeTile();
 
         //Reset treasure chest and items chap has picked up
         treasureChest.clear();
         keys.clear();
     }
+
+    private void tempInitMaze() {
+
+        for (int i = 0; i < 10; i++){
+            maze[0][i] = new FreeTile();
+        }
+
+        for (int i = 0; i < 10; i++){
+            maze[9][i] = new FreeTile();
+        }
+
+        for (int i = 1; i < 9; i++){
+            maze[i][0] = new FreeTile();
+        }
+
+        for (int i = 1; i < 9; i++){
+            maze[i][9] = new FreeTile();
+        }
+
+        for (int i = 1; i < 9; i++){
+            for (int j = 1; j < 9; j++){
+                maze[j][i] = new FreeTile();
+            }
+        }
+    }
+
 
     /**
      * Get the current position of chap on the maze.
@@ -133,9 +172,10 @@ public class Game {
     //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
         chapPos = new Position(a, b);
+        currentTile = maze[b][a];
         Tile chap = maze[chapY][chapX];
         setTile(b, a, chap);
-        setTile(chapY, chapX, new FreeTile());
+        setTile(chapY, chapX, currentTile);
     }
 
     //Updates the specified tile in the maze array
