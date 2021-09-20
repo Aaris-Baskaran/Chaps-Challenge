@@ -107,19 +107,19 @@ public class Game {
         maze = new Tile[10][10];
 
         for (int i = 0; i < 10; i++){
-            maze[0][i] = new FreeTile();
+            maze[0][i] = new WallTile();
         }
 
         for (int i = 0; i < 10; i++){
-            maze[9][i] = new FreeTile();
+            maze[9][i] = new WallTile();
         }
 
         for (int i = 1; i < 9; i++){
-            maze[i][0] = new FreeTile();
+            maze[i][0] = new WallTile();
         }
 
         for (int i = 1; i < 9; i++){
-            maze[i][9] = new FreeTile();
+            maze[i][9] = new WallTile();
         }
 
         for (int i = 1; i < 9; i++){

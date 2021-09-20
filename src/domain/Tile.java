@@ -2,6 +2,7 @@ package domain;
 
 import javax.imageio.ImageIO;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -25,7 +26,8 @@ public abstract class Tile {
 	protected Image getImage(String fileName) {
 		Image image = null;
 		try {
-			image = ImageIO.read(this.getClass().getResource(fileName));
+			System.out.println(fileName);
+			image = ImageIO.read(new File(fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
