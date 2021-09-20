@@ -18,11 +18,15 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import domain.Game;
+import renderer.Renderer;
 
 /**
  * Graphic User Interface Class
@@ -32,9 +36,11 @@ import domain.Game;
  */
 public class GUI {
 	Game game = new Game();
+	Renderer r = new Renderer(game);
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
+	JMenuBar menu = new JMenuBar();
 	public int count = 10;
 	JLabel timerText = new JLabel();
 	Timer timer;
@@ -60,8 +66,10 @@ public class GUI {
 	 */
 	public GUI() throws IOException {
 
+		gamePanel = r.getPanel();
 		gamePanel.setBackground(Color.GREEN);
 		gamePanel.setBounds(0, 0, 600, 600);
+		
 
 		// createDesign();
 		Color bg = new Color(72, 204, 180);
@@ -89,10 +97,14 @@ public class GUI {
 
 		// Key Press Actions
 		keyBindings();
-
+		
+		// Initialize the menu bar
+		createMenuBar();
+		
 		frame.setSize(new Dimension(900, 600));
-		frame.setResizable(false);
+		//frame.setResizable(false);
 
+		
 		frame.add(gamePanel);
 		frame.add(designPanel);
 
@@ -100,6 +112,28 @@ public class GUI {
 
 	}
 
+	private void createMenuBar() {
+		var fileMenu = new JMenu("File");
+		var saveItem = new JMenuItem("Save and Quit");
+		saveItem.setMnemonic(KeyEvent.VK_S);
+		var loadItem = new JMenuItem("Load Saved Game");
+		var exitItem = new JMenuItem("Exit");
+		
+		var levelMenu = new JMenu("Level");
+		var level1Item = new JMenuItem("Load Level 1");
+		var level2Item = new JMenuItem("Load Level 2");		
+		
+		fileMenu.add(saveItem);
+		fileMenu.add(loadItem);
+		fileMenu.add(exitItem);
+		menu.add(fileMenu);
+		
+		levelMenu.add(level1Item);
+		levelMenu.add(level2Item);
+		menu.add(levelMenu);
+		
+		frame.setJMenuBar(menu);
+	}
 	private void keyBindings() {
 		upAction = new UpAction();
 		downAction = new DownAction();
@@ -152,6 +186,11 @@ public class GUI {
 	// Key Binding Classes
 	public class UpAction extends AbstractAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('u');
@@ -159,6 +198,11 @@ public class GUI {
 	}
 
 	public class DownAction extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -168,6 +212,11 @@ public class GUI {
 
 	public class LeftAction extends AbstractAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('l');
@@ -175,6 +224,11 @@ public class GUI {
 	}
 
 	public class RightAction extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -185,6 +239,11 @@ public class GUI {
 
 	public class SpaceAction extends AbstractAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(designPanel, "Paused");
@@ -192,6 +251,11 @@ public class GUI {
 	}
 
 	public class CtrlSAction extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -201,6 +265,11 @@ public class GUI {
 
 	public class CtrlXAction extends AbstractAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			changeColour(gamePanel);
@@ -209,12 +278,22 @@ public class GUI {
 
 	public class CtrlRAction extends AbstractAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			changeColour(gamePanel);
 		}
 	}
 	public class Ctrl1Action extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -223,6 +302,11 @@ public class GUI {
 	}
 
 	public class Ctrl2Action extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
