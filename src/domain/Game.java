@@ -104,6 +104,8 @@ public class Game {
 
     private void tempInitMaze() {
 
+        maze = new Tile[10][10];
+
         for (int i = 0; i < 10; i++){
             maze[0][i] = new FreeTile();
         }
