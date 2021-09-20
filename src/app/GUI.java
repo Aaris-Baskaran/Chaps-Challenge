@@ -71,24 +71,22 @@ public class GUI {
 		gamePanel.setBounds(0, 0, 600, 660);
 		
 
-		// createDesign();
 		Color bg = new Color(72, 204, 180);
 		designPanel.setBackground(bg);
-		// designPanel.setBounds(700, 0, 300, 600);
-		designPanel.setLayout(new GridLayout(3, 3, 20, 0));
-		// designPanel.setSize(300, 600);
+		designPanel.setLayout(new GridLayout(3, 3, 20, 20));
 
 		BufferedImage img = ImageIO.read(new File("Logo.jpg"));
 		JLabel picLabel = new JLabel();
 		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(dimg);
 		picLabel = new JLabel(imageIcon);
+		
 		fillPanel(designPanel);
 		designPanel.add(picLabel);
 		fillPanel(designPanel);
 		timerText = new JLabel("Timer:");
 		Font f = new Font("SansSerif", Font.BOLD, 20);
-		// set the font to the Jlabel
+		// set the font of the text
 		timerText.setFont(f);
 		timerText.setBounds(80, 20, 250, 80);
 		designPanel.add(timerText);
@@ -194,6 +192,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('u');
+			r.updateBoard(game);
 		}
 	}
 
@@ -207,6 +206,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('d');
+			r.updateBoard(game);
 		}
 	}
 
@@ -220,6 +220,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('l');
+			r.updateBoard(game);
 		}
 	}
 
@@ -234,6 +235,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 
 			game.move('r');
+			r.updateBoard(game);
 		}
 	}
 
@@ -272,7 +274,9 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			changeColour(gamePanel);
+			r.updateBoard(game);
+			gamePanel = r.getPanel();
+			changeColour(designPanel);
 		}
 	}
 
