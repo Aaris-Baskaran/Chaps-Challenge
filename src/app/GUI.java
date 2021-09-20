@@ -68,7 +68,7 @@ public class GUI {
 
 		gamePanel = r.getPanel();
 		gamePanel.setBackground(Color.GREEN);
-		gamePanel.setBounds(0, 0, 600, 600);
+		gamePanel.setBounds(0, 0, 600, 660);
 		
 
 		// createDesign();
@@ -101,8 +101,8 @@ public class GUI {
 		// Initialize the menu bar
 		createMenuBar();
 		
-		frame.setSize(new Dimension(900, 600));
-		//frame.setResizable(false);
+		frame.setSize(new Dimension(900, 660));
+		frame.setResizable(false);
 
 		
 		frame.add(gamePanel);
