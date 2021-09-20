@@ -177,10 +177,10 @@ public class Game {
     //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
         chapPos = new Position(a, b);
-        currentTile = maze[b][a];
-        Tile chap = maze[chapY][chapX];
-        setTile(b, a, chap);
-        setTile(chapY, chapX, currentTile);
+        currentTile = maze[a][b];
+        Tile chap = maze[chapX][chapY];
+        setTile(a, b, chap);
+        setTile(chapX, chapY, currentTile);
     }
 
     //Updates the specified tile in the maze array
@@ -196,25 +196,24 @@ public class Game {
         Tile nextTile;
         //check direction first
         if(direction == 'u'){
-            nextTile = maze[y-1][x];
-            checkNextValid(nextTile);
+            nextTile = maze[x][y-1];
+            return checkNextValid(nextTile);
         }
         else if (direction == 'd'){
-            nextTile = maze[y+1][x];
-            checkNextValid(nextTile);
+            nextTile = maze[x][y+1];
+            return checkNextValid(nextTile);
         }
         else if (direction == 'l'){
-            nextTile = maze[y][x-1];
-            checkNextValid(nextTile);
+            nextTile = maze[x-1][y];
+            return checkNextValid(nextTile);
         }
         else if (direction == 'r'){
-            nextTile = maze[y][x+1];
-            checkNextValid(nextTile);
+            nextTile = maze[x+1][y];
+            return checkNextValid(nextTile);
         }
 
-        //next Tile is not a wall
-        //if next Tile is a locked door, chap as the key
-        return true;
+        //code never reaches this point
+        return false;
     }
 
     //checks if the next tile is a wall, or if its a locked door and chap has the key
