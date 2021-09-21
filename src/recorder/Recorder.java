@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Maurice.
  *
  */
-public class recorder {
+public class Recorder {
 	public ArrayList<String> moves = new ArrayList<String>();
 	private static int totalMoves = 0;
 	public void pastMoves(String s) {
@@ -17,6 +17,6 @@ public class recorder {
 		return totalMoves;
 	}
 	public static void setTotalMoves(int totalMoves) {
-		recorder.totalMoves = totalMoves;
+		Recorder.totalMoves = totalMoves;
 	}
 }

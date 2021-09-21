@@ -28,6 +28,7 @@ import javax.swing.KeyStroke;
 
 import domain.Game;
 import persistency.StateManager;
+import recorder.Recorder;
 import renderer.Renderer;
 
 /**
@@ -39,7 +40,8 @@ import renderer.Renderer;
 public class GUI {
 	StateManager manager = new StateManager();
 	Game game = new Game(manager.loadState());
-	Renderer r = new Renderer(game);
+	Renderer rend = new Renderer(game);
+	Recorder record = new Recorder();
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
@@ -69,7 +71,7 @@ public class GUI {
 	 */
 	public GUI() throws IOException {
 
-		gamePanel = r.getPanel();
+		gamePanel = rend.getPanel();
 		gamePanel.setBackground(Color.GREEN);
 		gamePanel.setBounds(0, 0, 600, 660);
 
@@ -230,7 +232,8 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('u');
-			r.updateBoard(game);
+			record.pastMoves("u");
+			rend.updateBoard(game);
 		}
 	}
 
@@ -244,7 +247,8 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('d');
-			r.updateBoard(game);
+			record.pastMoves("d");
+			rend.updateBoard(game);
 		}
 	}
 
@@ -258,7 +262,8 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.move('l');
-			r.updateBoard(game);
+			record.pastMoves("l");
+			rend.updateBoard(game);
 		}
 	}
 
@@ -273,7 +278,8 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 
 			game.move('r');
-			r.updateBoard(game);
+			record.pastMoves("r");
+			rend.updateBoard(game);
 		}
 	}
 
@@ -313,8 +319,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			r.updateBoard(game);
-			gamePanel = r.getPanel();
+			rend.updateBoard(game);
+			gamePanel = rend.getPanel();
 			System.exit(0);
 		}
 	}
@@ -328,7 +334,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			changeColour(gamePanel);
+			System.out.println(record.moves);
 		}
 	}
 
