@@ -69,4 +69,13 @@ public class StateManager {
 		
 		return state;		
 	}
+	
+	public void SaveXML() {
+		try {
+			File saved = new File("levels\\saved.xml");
+			saved.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
