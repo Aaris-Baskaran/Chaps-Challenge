@@ -5,5 +5,7 @@ package recorder;
  *
  */
 public class recorder {
-
+	public void pastMoves(String s) {
+		
+	}
 }
