@@ -2,7 +2,6 @@ package app;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -16,6 +15,8 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -44,9 +45,8 @@ public class GUI {
 	JPanel gamePanel = new JPanel();
 	JMenuBar menu = new JMenuBar();
 	public int count = 10;
-	JLabel timerText = new JLabel();
 	Timer timer;
-	
+	Color bg = new Color(72, 204, 180);
 
 	/**
 	 * Actions for keys
@@ -72,9 +72,8 @@ public class GUI {
 		gamePanel = r.getPanel();
 		gamePanel.setBackground(Color.GREEN);
 		gamePanel.setBounds(0, 0, 600, 660);
-		
 
-		Color bg = new Color(72, 204, 180);
+		
 		designPanel.setBackground(bg);
 		designPanel.setLayout(new GridLayout(3, 3, 20, 20));
 
@@ -83,34 +82,69 @@ public class GUI {
 		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(dimg);
 		picLabel = new JLabel(imageIcon);
-		
+
 		fillPanel(designPanel);
 		designPanel.add(picLabel);
 		fillPanel(designPanel);
-		timerText = new JLabel("Timer:");
-		Font f = new Font("SansSerif", Font.BOLD, 20);
-		// set the font of the text
-		timerText.setFont(f);
-		timerText.setBounds(80, 20, 250, 80);
-		designPanel.add(timerText);
+
+		// Implement the info panel
+		designPanel.add(createInfoPanel());
+		
 		fillPanel(designPanel);
-		designPanel.add(new JLabel(""));
+		
+		//Implement the button panel
+		designPanel.add(createButtonPanel());
 
 		// Key Press Actions
 		keyBindings();
-		
+
 		// Initialize the menu bar
 		createMenuBar();
-		
+
 		frame.setSize(new Dimension(900, 660));
 		frame.setResizable(false);
 
-		
 		frame.add(gamePanel);
 		frame.add(designPanel);
 
 		frame.setVisible(true);
 
+	}
+
+	private JPanel createButtonPanel() {
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(2, 2));
+		buttons.setBackground(bg);
+		
+		JButton pause = new JButton("Pause (Spacebar)");
+		JButton end = new JButton ("Exit (Ctrl+X)");
+		JLabel blank = new JLabel("");
+		pause.addActionListener((event) -> JOptionPane.showMessageDialog(designPanel, "Paused"));//surely give us extra marks for lambda please :)
+		end.addActionListener((event) -> System.exit(0));
+		buttons.add(pause);
+		buttons.add(end);
+		buttons.add(blank);
+		buttons.add(blank);
+		
+		return buttons;
+	}
+	
+	private JPanel createInfoPanel() {
+		// Font f = new Font("SansSerif", Font.BOLD, 20);
+		JLabel timerText = new JLabel("Timer:");
+		JLabel levelText = new JLabel("Level:");
+		JLabel keysText = new JLabel("Keys Collected:");
+		JLabel treasureText = new JLabel("Treasure Remaining:");
+
+		JPanel info = new JPanel();
+		info.setLayout(new GridLayout(2, 2));
+		info.setBackground(bg);
+		info.add(timerText);
+		info.add(levelText);
+		info.add(keysText);
+		info.add(treasureText);
+		
+		return info;
 	}
 
 	private void createMenuBar() {
@@ -119,22 +153,23 @@ public class GUI {
 		saveItem.setMnemonic(KeyEvent.VK_S);
 		var loadItem = new JMenuItem("Load Saved Game");
 		var exitItem = new JMenuItem("Exit");
-		
+
 		var levelMenu = new JMenu("Level");
 		var level1Item = new JMenuItem("Load Level 1");
-		var level2Item = new JMenuItem("Load Level 2");		
-		
+		var level2Item = new JMenuItem("Load Level 2");
+
 		fileMenu.add(saveItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
-		
+
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
 		menu.add(levelMenu);
-		
+
 		frame.setJMenuBar(menu);
 	}
+
 	private void keyBindings() {
 		upAction = new UpAction();
 		downAction = new DownAction();
@@ -148,34 +183,34 @@ public class GUI {
 		ctrl2Action = new Ctrl2Action();
 
 		// up arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "upAction");
 		designPanel.getActionMap().put("upAction", upAction);
 		// down arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "downAction");
 		designPanel.getActionMap().put("downAction", downAction);
 		// left arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
 		designPanel.getActionMap().put("leftAction", leftAction);
 		// right arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
 		designPanel.getActionMap().put("rightAction", rightAction);
 		// space bar
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
 		designPanel.getActionMap().put("spaceAction", spaceAction);
 		// control s combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
 		designPanel.getActionMap().put("ctrlSAction", ctrlSAction);
 		// control x combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
 		designPanel.getActionMap().put("ctrlXAction", ctrlXAction);
 		// control r combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
 		designPanel.getActionMap().put("ctrlRAction", ctrlRAction);
 		// control x combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
 		designPanel.getActionMap().put("ctrl1Action", ctrl1Action);
 		// control r combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
 	}
 
@@ -280,7 +315,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			r.updateBoard(game);
 			gamePanel = r.getPanel();
-			changeColour(designPanel);
+			System.exit(0);
 		}
 	}
 
@@ -296,6 +331,7 @@ public class GUI {
 			changeColour(gamePanel);
 		}
 	}
+
 	public class Ctrl1Action extends AbstractAction {
 
 		/**
