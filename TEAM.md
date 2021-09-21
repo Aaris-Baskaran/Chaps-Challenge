@@ -10,7 +10,7 @@ App | Stelio Brooky  | @brookystel
 -------|-----------------|---------------------------
 Recorder | Maurice Nolan  | @nolanarno1
 -------|-----------------|---------------------------
-Persistency | Stelio Brooky  | @brookystel
+Persistency | Kelland Vuong  | @vuongkell
 -------|-----------------|---------------------------
 Fuzz | Kalem Edlin  | @edlinkale
 -------|-----------------|---------------------------

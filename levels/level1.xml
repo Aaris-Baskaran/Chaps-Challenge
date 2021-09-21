@@ -1,0 +1,19 @@
+<?xml version = "1.0"?>
+<Game>
+	<Level>1</Level>	
+	<Time>100</Time>
+	<Row>##########</Row>
+	<Row>#________#</Row>
+	<Row>#________#</Row>
+	<Row>#________#</Row>
+	<Row>#________#</Row>
+	<Row>#____P___#</Row>
+	<Row>#________#</Row>
+	<Row>#________#</Row>
+	<Row>#________#</Row>
+	<Row>##########</Row>
+	<X>5</X>
+	<Y>5</Y>
+	<Dir>d</Dir>
+	<Chips>10</Chips>
+</Game>
