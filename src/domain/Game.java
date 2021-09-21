@@ -56,9 +56,14 @@ public class Game {
     private static char chapDirection;
 
     /**
-     * Holds the current tile that chap has stepped over
+     * Holds the current tile that chap is on
      */
     private Tile currentTile;
+
+    /**
+     * Hold the tile that chap is going to step on.
+     */
+    private Tile theNextTile;
 
     /**
      * Constructor for the Game.
@@ -164,9 +169,22 @@ public class Game {
         else if(c == 'L'){
             return new LockedDoorTile(Color.YELLOW);
         }
+        else if(c == 'k'){
+            return new KeyTile(Color.BLUE);
+        }
+        else if(c == 'l'){
+            return new LockedDoorTile(Color.BLUE);
+        }
         else if(c == 'T'){
             return new ChipTile();
         }
+        else if(c == 'X'){
+            return new ExitTile();
+        }
+        else if(c == 'I'){
+            return new InfoTile();
+        }
+
     	return null;
     }
 
@@ -215,10 +233,11 @@ public class Game {
     //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
         chapPos = new Position(a, b);
-        currentTile = maze[a][b];
+        theNextTile = maze[a][b];
         Tile chap = maze[chapX][chapY];
         setTile(a, b, chap);
         setTile(chapX, chapY, currentTile);
+        currentTile = theNextTile;
     }
 
     //Updates the specified tile in the maze array
