@@ -1,5 +1,6 @@
 package domain;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import persistency.State;
@@ -132,27 +133,40 @@ public class Game {
 
         maze[5][5] = new ChapTile();
     }
-    
-    public void initMaze(String[] input) {
+
+    //Initialise the maze array for the level
+    private void initMaze(String[] input) {
     	
     	maze = new Tile[10][10];
     	
     	for(int row = 0; row < 10; ++row) {
     		for(int col = 0; col < 10; ++col) {
-    			char c = input[row].charAt(col);
-    			if(c == 'P') {
-    				maze[row][col] = new ChapTile();
-    			} else {
-    				maze[row][col] = createTile(c, row, col);
-    			}
+    			char c = input[col].charAt(row);
+    			maze[row][col] = createTile(c);
     		}
     	}
-    	
     }
-    
-    public Tile createTile(char c, int row, int col) {
-    	if(c == '_') return new FreeTile();
-    	if(c == '#') return new WallTile();
+
+    //Returns a Tile to add into the maze
+    private Tile createTile(char c) {
+        if(c == 'P') {
+            return new ChapTile();
+        }
+    	else if(c == '_') {
+    	    return new FreeTile();
+        }
+    	else if(c == '#') {
+    	    return new WallTile();
+        }
+    	else if(c == 'K'){
+    	    return new KeyTile(Color.YELLOW);
+        }
+        else if(c == 'L'){
+            return new LockedDoorTile(Color.YELLOW);
+        }
+        else if(c == 'T'){
+            return new ChipTile();
+        }
     	return null;
     }
 

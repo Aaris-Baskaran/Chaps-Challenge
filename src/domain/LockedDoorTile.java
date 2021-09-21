@@ -18,7 +18,8 @@ public class LockedDoorTile extends Tile {
 	/**
 	 * Initially, door is locked
 	 */
-	public LockedDoorTile() {
+	public LockedDoorTile(Color c) {
+		color = c;
 		canMove = false;
 	}
 
