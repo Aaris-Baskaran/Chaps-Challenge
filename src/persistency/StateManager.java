@@ -37,8 +37,6 @@ public class StateManager {
 			
 			Document doc = db.parse(files[0]);
 			
-			System.out.println(doc.getDocumentElement().getNodeName());
-			
 			Element element = doc.getDocumentElement();
 			
 			String level = element.getElementsByTagName("Level").item(0).getTextContent();
@@ -72,7 +70,7 @@ public class StateManager {
 	
 	public void SaveXML() {
 		try {
-			File saved = new File("levels\\saved.xml");
+			File saved = new File("levels/saved.xml");
 			saved.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
