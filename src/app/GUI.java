@@ -2,7 +2,6 @@ package app;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -16,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -44,9 +44,8 @@ public class GUI {
 	JPanel gamePanel = new JPanel();
 	JMenuBar menu = new JMenuBar();
 	public int count = 10;
-	JLabel timerText = new JLabel();
 	Timer timer;
-	
+	Color bg = new Color(72, 204, 180);
 
 	/**
 	 * Actions for keys
@@ -72,9 +71,8 @@ public class GUI {
 		gamePanel = r.getPanel();
 		gamePanel.setBackground(Color.GREEN);
 		gamePanel.setBounds(0, 0, 600, 660);
-		
 
-		Color bg = new Color(72, 204, 180);
+		
 		designPanel.setBackground(bg);
 		designPanel.setLayout(new GridLayout(3, 3, 20, 20));
 
@@ -83,34 +81,68 @@ public class GUI {
 		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(dimg);
 		picLabel = new JLabel(imageIcon);
-		
+
 		fillPanel(designPanel);
 		designPanel.add(picLabel);
 		fillPanel(designPanel);
-		timerText = new JLabel("Timer:");
-		Font f = new Font("SansSerif", Font.BOLD, 20);
-		// set the font of the text
-		timerText.setFont(f);
-		timerText.setBounds(80, 20, 250, 80);
-		designPanel.add(timerText);
+
+		// Implement the info panel
+		designPanel.add(createInfoPanel());
+		
 		fillPanel(designPanel);
-		designPanel.add(new JLabel(""));
+		
+		//Implement the button panel
+		designPanel.add(createButtonPanel());
 
 		// Key Press Actions
 		keyBindings();
-		
+
 		// Initialize the menu bar
 		createMenuBar();
-		
+
 		frame.setSize(new Dimension(900, 660));
 		frame.setResizable(false);
 
-		
 		frame.add(gamePanel);
 		frame.add(designPanel);
 
 		frame.setVisible(true);
 
+	}
+
+	private JPanel createButtonPanel() {
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(2, 2));
+		buttons.setBackground(bg);
+		
+		JButton pause = new JButton("Pause (Spacebar)");
+		JButton end = new JButton ("Exit (Ctrl+X)");
+		JLabel blank = new JLabel("");
+		
+		buttons.add(pause);
+		buttons.add(end);
+		buttons.add(blank);
+		buttons.add(blank);
+		
+		return buttons;
+	}
+	
+	private JPanel createInfoPanel() {
+		// Font f = new Font("SansSerif", Font.BOLD, 20);
+		JLabel timerText = new JLabel("Timer:");
+		JLabel levelText = new JLabel("Level:");
+		JLabel keysText = new JLabel("Keys Collected:");
+		JLabel treasureText = new JLabel("Treasure Remaining:");
+
+		JPanel info = new JPanel();
+		info.setLayout(new GridLayout(2, 2));
+		info.setBackground(bg);
+		info.add(timerText);
+		info.add(levelText);
+		info.add(keysText);
+		info.add(treasureText);
+		
+		return info;
 	}
 
 	private void createMenuBar() {
@@ -119,22 +151,23 @@ public class GUI {
 		saveItem.setMnemonic(KeyEvent.VK_S);
 		var loadItem = new JMenuItem("Load Saved Game");
 		var exitItem = new JMenuItem("Exit");
-		
+
 		var levelMenu = new JMenu("Level");
 		var level1Item = new JMenuItem("Load Level 1");
-		var level2Item = new JMenuItem("Load Level 2");		
-		
+		var level2Item = new JMenuItem("Load Level 2");
+
 		fileMenu.add(saveItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
-		
+
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
 		menu.add(levelMenu);
-		
+
 		frame.setJMenuBar(menu);
 	}
+
 	private void keyBindings() {
 		upAction = new UpAction();
 		downAction = new DownAction();
@@ -295,6 +328,7 @@ public class GUI {
 			changeColour(gamePanel);
 		}
 	}
+
 	public class Ctrl1Action extends AbstractAction {
 
 		/**
