@@ -75,7 +75,7 @@ public class Game {
     /**
      * Loads a level, gets data for the level from persistency module.
      *
-     * @param levelNum the level number
+     * @param state the level number
      */
     public void loadLevel(State state) {
         //somehow get level info from persistency module
