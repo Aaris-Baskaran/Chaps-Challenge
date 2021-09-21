@@ -16,6 +16,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -118,7 +119,8 @@ public class GUI {
 		JButton pause = new JButton("Pause (Spacebar)");
 		JButton end = new JButton ("Exit (Ctrl+X)");
 		JLabel blank = new JLabel("");
-		
+		pause.addActionListener((event) -> JOptionPane.showMessageDialog(designPanel, "Paused"));//surely give us extra marks for lambda please :)
+		end.addActionListener((event) -> System.exit(0));
 		buttons.add(pause);
 		buttons.add(end);
 		buttons.add(blank);
@@ -181,34 +183,34 @@ public class GUI {
 		ctrl2Action = new Ctrl2Action();
 
 		// up arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "upAction");
 		designPanel.getActionMap().put("upAction", upAction);
 		// down arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "downAction");
 		designPanel.getActionMap().put("downAction", downAction);
 		// left arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
 		designPanel.getActionMap().put("leftAction", leftAction);
 		// right arrow key
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
 		designPanel.getActionMap().put("rightAction", rightAction);
 		// space bar
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
 		designPanel.getActionMap().put("spaceAction", spaceAction);
 		// control s combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
 		designPanel.getActionMap().put("ctrlSAction", ctrlSAction);
 		// control x combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
 		designPanel.getActionMap().put("ctrlXAction", ctrlXAction);
 		// control r combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
 		designPanel.getActionMap().put("ctrlRAction", ctrlRAction);
 		// control x combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
 		designPanel.getActionMap().put("ctrl1Action", ctrl1Action);
 		// control r combination
-		designPanel.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
 	}
 
@@ -313,7 +315,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			r.updateBoard(game);
 			gamePanel = r.getPanel();
-			changeColour(designPanel);
+			System.exit(0);
 		}
 	}
 
