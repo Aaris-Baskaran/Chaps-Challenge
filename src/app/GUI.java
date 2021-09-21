@@ -152,16 +152,19 @@ public class GUI {
 	private void createMenuBar() {
 		var fileMenu = new JMenu("File");
 		var saveItem = new JMenuItem("Save and Quit");
+		saveItem.addActionListener((event) -> manager.SaveXML());
+		saveItem.addActionListener((event) -> System.exit(0));
 		saveItem.setMnemonic(KeyEvent.VK_S);
 		var loadItem = new JMenuItem("Load Saved Game");
-		var exitItem = new JMenuItem("Exit");
+		var exitItem = new JMenuItem("Quit");
+		exitItem.addActionListener((event) -> System.exit(0));
 
 		var levelMenu = new JMenu("Level");
 		var level1Item = new JMenuItem("Load Level 1");
 		var level2Item = new JMenuItem("Load Level 2");
 
-		fileMenu.add(saveItem);
 		fileMenu.add(loadItem);
+		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
 
