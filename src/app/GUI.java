@@ -297,7 +297,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			changeColour(gamePanel);
+			manager.SaveXML();
+			System.exit(0);
 		}
 	}
 
