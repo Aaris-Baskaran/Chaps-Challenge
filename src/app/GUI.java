@@ -6,13 +6,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.Timer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -33,18 +31,15 @@ import renderer.Renderer;
  */
 public class GUI {
 	StateManager manager = new StateManager();
-	Game game = new Game(manager.loadState());
-	Renderer rend = new Renderer(game);
 	Recorder record = new Recorder();
-	Design design = new Design(game);
+	Game game = new Game(manager.loadState());	
+	Renderer rend = new Renderer(game);
+	Design design = new Design(game, manager);
+	
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
-	JPanel infoPanel = new JPanel();
 	JMenuBar menu = new JMenuBar();
-	JLabel keysText = new JLabel();
-	public int count = 10;
-	Timer timer;
 	Color bg = new Color(72, 204, 180);
 
 	/**
@@ -80,31 +75,35 @@ public class GUI {
 		// Initialize the menu bar
 		createMenuBar();
 
-		frame.setLayout(new BorderLayout());
-		
+		frame.setLayout(new BorderLayout());		
 		frame.setResizable(false);
-
 		frame.add(gamePanel, BorderLayout.WEST);
 		frame.add(designPanel, BorderLayout.EAST);
 		frame.pack();
-
 		frame.setVisible(true);
 
 	}
 
 	private void createMenuBar() {
-		var fileMenu = new JMenu("File");
-		var saveItem = new JMenuItem("Save and Quit");
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem saveItem = new JMenuItem("Save and Quit");
 		saveItem.addActionListener((event) -> manager.SaveXML());
 		saveItem.addActionListener((event) -> System.exit(0));
-		saveItem.setMnemonic(KeyEvent.VK_S);
-		var loadItem = new JMenuItem("Load Saved Game");
-		var exitItem = new JMenuItem("Quit");
+		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+		JMenuItem loadItem = new JMenuItem("Load Saved Game");
+		loadItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
+		JMenuItem exitItem = new JMenuItem("Quit");
 		exitItem.addActionListener((event) -> System.exit(0));
+		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
 
-		var levelMenu = new JMenu("Level");
-		var level1Item = new JMenuItem("Load Level 1");
-		var level2Item = new JMenuItem("Load Level 2");
+		JMenu levelMenu = new JMenu("Level");
+		JMenuItem level1Item = new JMenuItem("Load Level 1");
+		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
+		JMenuItem level2Item = new JMenuItem("Load Level 2");
+		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
+		
+		JMenu helpMenu = new JMenu("Help");
+		JMenuItem helpItem = new JMenuItem("See game instructions and controls");
 
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);
@@ -114,6 +113,9 @@ public class GUI {
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
 		menu.add(levelMenu);
+		
+		helpMenu.add(helpItem);
+		menu.add(helpMenu);
 
 		frame.setJMenuBar(menu);
 	}
@@ -154,10 +156,10 @@ public class GUI {
 		// control r combination
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
 		designPanel.getActionMap().put("ctrlRAction", ctrlRAction);
-		// control x combination
+		// control 1 combination
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
 		designPanel.getActionMap().put("ctrl1Action", ctrl1Action);
-		// control r combination
+		// control 2 combination
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
 	}
@@ -235,7 +237,6 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
 			game.move('r');
 			record.pastMoves("r");
 			rend.updateBoard(game);
