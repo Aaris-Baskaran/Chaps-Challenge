@@ -3,20 +3,13 @@ package app;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,6 +36,7 @@ public class GUI {
 	Game game = new Game(manager.loadState());
 	Renderer rend = new Renderer(game);
 	Recorder record = new Recorder();
+	Design design = new Design(game);
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
@@ -75,10 +69,9 @@ public class GUI {
 	public GUI() throws IOException {
 
 		gamePanel = rend.getPanel();
-		gamePanel.setBackground(Color.GREEN);
 		gamePanel.setPreferredSize(new Dimension(600,600));
 
-		designPanel = createDesignPanel();
+		designPanel = design.designPanel;
 		designPanel.setPreferredSize(new Dimension(300,600));
 
 		// Key Press Actions
@@ -96,66 +89,7 @@ public class GUI {
 		frame.pack();
 
 		frame.setVisible(true);
-		updateGUI();
 
-	}
-	
-	private JPanel createDesignPanel() throws IOException {
-		JPanel design = new JPanel();
-		design.setBackground(bg);
-		design.setLayout(new GridLayout(3, 1));
-
-		BufferedImage img = ImageIO.read(new File("Logo.jpg"));
-		JLabel picLabel = new JLabel();
-		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
-		ImageIcon imageIcon = new ImageIcon(dimg);
-		picLabel = new JLabel(imageIcon);
-		design.add(picLabel);
-
-		// Implement the info panel
-		infoPanel = createInfoPanel();
-		design.add(infoPanel);
-		
-		//Implement the button panel
-		design.add(createButtonPanel());
-		
-		return design;
-	}
-
-	private JPanel createButtonPanel() {
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new GridLayout(2, 2));
-		buttons.setBackground(bg);
-		
-		JButton pause = new JButton("Pause (Spacebar)");
-		JButton end = new JButton ("Exit (Ctrl+X)");
-		JLabel blank = new JLabel("");
-		pause.addActionListener((event) -> JOptionPane.showMessageDialog(designPanel, "Paused"));//surely give us extra marks for lambda please :)
-		end.addActionListener((event) -> System.exit(0));
-		buttons.add(pause);
-		buttons.add(end);
-		buttons.add(blank);
-		buttons.add(blank);
-		
-		return buttons;
-	}
-	
-	private JPanel createInfoPanel() {
-		// Font f = new Font("SansSerif", Font.BOLD, 20);
-		JLabel timerText = new JLabel("Timer:");
-		JLabel levelText = new JLabel("Level: " + game.getLevel());
-		keysText = new JLabel("Keys Collected: " + game.getKeys().size());
-		JLabel treasureText = new JLabel("Treasure Remaining:");
-
-		JPanel info = new JPanel();
-		info.setLayout(new GridLayout(2, 2));
-		info.setBackground(bg);
-		info.add(timerText);
-		info.add(levelText);
-		info.add(keysText);
-		info.add(treasureText);
-		
-		return info;
 	}
 
 	private void createMenuBar() {
@@ -228,19 +162,6 @@ public class GUI {
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
 	}
 
-	private void fillPanel(JPanel p) {
-		p.add(new JPanel());
-		p.add(new JPanel());
-	}
-	
-	public void updateGUI() {
-				keysText = new JLabel("Keys Collected: " + game.getKeys().size());
-				infoPanel.repaint();
-
-		
-		
-	}
-
 	// Key Binding Classes
 	public class UpAction extends AbstractAction {
 
@@ -254,7 +175,12 @@ public class GUI {
 			game.move('u');
 			record.pastMoves("u");
 			rend.updateBoard(game);
-			updateGUI();
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -270,6 +196,12 @@ public class GUI {
 			game.move('d');
 			record.pastMoves("d");
 			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -285,6 +217,12 @@ public class GUI {
 			game.move('l');
 			record.pastMoves("l");
 			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -301,11 +239,8 @@ public class GUI {
 			game.move('r');
 			record.pastMoves("r");
 			rend.updateBoard(game);
-			keysText.setText("Keys Collected: " + game.getKeys().size());
 			try {
-				designPanel = createDesignPanel();
-				frame.add(designPanel);
-				frame.repaint();
+				design.update();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -349,8 +284,6 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			rend.updateBoard(game);
-			gamePanel = rend.getPanel();
 			System.exit(0);
 		}
 	}
@@ -377,10 +310,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			rend.updateBoard(game);
-			changeColour(designPanel);
+		
 			
-			System.out.println(game.getKeys().size());
 		}
 	}
 
@@ -393,13 +324,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			changeColour(gamePanel);
+			
 		}
 	}
-
-	private static void changeColour(JPanel p) {
-		p.setBackground(Color.getHSBColor((float) Math.random() * 255, (float) Math.random() * 255,
-				(float) Math.random() * 255));
-	}
-
 }

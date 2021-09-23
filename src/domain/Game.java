@@ -1,7 +1,6 @@
 package domain;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -331,6 +330,15 @@ public class Game {
      */
     public int getLevel() {
         return level;
+    }
+    
+    /**
+     * Get the maximum time.
+     *
+     * @return maxTime
+     */
+    public int getTime() {
+        return maxTime;
     }
 
     /**
