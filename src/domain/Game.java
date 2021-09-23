@@ -45,7 +45,7 @@ public class Game {
     /**
      * The treasure chest, list of chips.
      */
-    private ArrayList<ChipTile> treasureChest;
+    private Set<ChipTile> treasureChest;
 
     /**
      * The keys chap has collected.
@@ -72,8 +72,8 @@ public class Game {
      */
     public Game(State state) {
 
-        //Initialise treasure chest and chap's items
-        treasureChest = new ArrayList<ChipTile>();
+        //Initialise treasure chest and chap's keys
+        treasureChest = new HashSet<ChipTile>();
         keys = new HashSet<KeyTile>();
         
         loadLevel(state);
@@ -210,7 +210,6 @@ public class Game {
         if(isValid(direction)){
             moveChap(direction);
             chapDirection = direction;
-            System.out.println("keys = " + keys);
         }
     }
 
@@ -240,7 +239,7 @@ public class Game {
         Tile chap = maze[chapX][chapY];         //get the chap tile
         setTile(a, b, chap);                    //set the new position on the maze to the chap tile
         setTile(chapX, chapY, currentTile);     //set the old position, where chap was, to the tile that was there before chap moved onto it
-        if(theNextTile.isA(KeyTile.class)){
+        if(theNextTile.isA(KeyTile.class) || theNextTile.isA(ChipTile.class)){
             currentTile = new FreeTile();       //if chap has stepped onto a key, then the key should disappear
         }else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
@@ -282,22 +281,25 @@ public class Game {
     }
 
     //checks if the next tile is a wall, or if its a locked door and chap has the key
+    //also adds keys and chips to chaps collections
     private boolean checkNextValid(Tile nextTile){
         //check if next tile is a wall
         if (nextTile.isA(WallTile.class)){
             return false;
         }
-
         //if next tile is a locked door, check if chap has the key
-        if (nextTile.isA(LockedDoorTile.class) && !hasKey(nextTile)){
+        else if (nextTile.isA(LockedDoorTile.class) && !hasKey(nextTile)){
             return false;
         }
-
         //if next tile is a key, chap can move onto it. Also add the key to keys collection
-        if (nextTile.isA(KeyTile.class)){
+        else if (nextTile.isA(KeyTile.class)){
             keys.add((KeyTile)nextTile);
         }
-
+        //if next tile is a chip, chap can move onto it, add the chip to treasure chest, update no. of chipsRemaining
+        else if (nextTile.isA(ChipTile.class)){
+            treasureChest.add((ChipTile)nextTile);
+            chipsRemaining--;
+        }
         return true;
     }
 
