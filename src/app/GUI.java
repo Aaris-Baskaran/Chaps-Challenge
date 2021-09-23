@@ -1,5 +1,6 @@
 package app;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -45,7 +46,9 @@ public class GUI {
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
+	JPanel infoPanel = new JPanel();
 	JMenuBar menu = new JMenuBar();
+	JLabel keysText = new JLabel();
 	public int count = 10;
 	Timer timer;
 	Color bg = new Color(72, 204, 180);
@@ -73,29 +76,10 @@ public class GUI {
 
 		gamePanel = rend.getPanel();
 		gamePanel.setBackground(Color.GREEN);
-		gamePanel.setBounds(0, 0, 600, 660);
+		gamePanel.setPreferredSize(new Dimension(600,600));
 
-		
-		designPanel.setBackground(bg);
-		designPanel.setLayout(new GridLayout(3, 3, 20, 20));
-
-		BufferedImage img = ImageIO.read(new File("Logo.jpg"));
-		JLabel picLabel = new JLabel();
-		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
-		ImageIcon imageIcon = new ImageIcon(dimg);
-		picLabel = new JLabel(imageIcon);
-
-		fillPanel(designPanel);
-		designPanel.add(picLabel);
-		fillPanel(designPanel);
-
-		// Implement the info panel
-		designPanel.add(createInfoPanel());
-		
-		fillPanel(designPanel);
-		
-		//Implement the button panel
-		designPanel.add(createButtonPanel());
+		designPanel = createDesignPanel();
+		designPanel.setPreferredSize(new Dimension(300,600));
 
 		// Key Press Actions
 		keyBindings();
@@ -103,14 +87,39 @@ public class GUI {
 		// Initialize the menu bar
 		createMenuBar();
 
-		frame.setSize(new Dimension(900, 660));
+		frame.setLayout(new BorderLayout());
+		
 		frame.setResizable(false);
 
-		frame.add(gamePanel);
-		frame.add(designPanel);
+		frame.add(gamePanel, BorderLayout.WEST);
+		frame.add(designPanel, BorderLayout.EAST);
+		frame.pack();
 
 		frame.setVisible(true);
+		updateGUI();
 
+	}
+	
+	private JPanel createDesignPanel() throws IOException {
+		JPanel design = new JPanel();
+		design.setBackground(bg);
+		design.setLayout(new GridLayout(3, 1));
+
+		BufferedImage img = ImageIO.read(new File("Logo.jpg"));
+		JLabel picLabel = new JLabel();
+		Image dimg = img.getScaledInstance(270, 170, Image.SCALE_SMOOTH);
+		ImageIcon imageIcon = new ImageIcon(dimg);
+		picLabel = new JLabel(imageIcon);
+		design.add(picLabel);
+
+		// Implement the info panel
+		infoPanel = createInfoPanel();
+		design.add(infoPanel);
+		
+		//Implement the button panel
+		design.add(createButtonPanel());
+		
+		return design;
 	}
 
 	private JPanel createButtonPanel() {
@@ -134,8 +143,8 @@ public class GUI {
 	private JPanel createInfoPanel() {
 		// Font f = new Font("SansSerif", Font.BOLD, 20);
 		JLabel timerText = new JLabel("Timer:");
-		JLabel levelText = new JLabel("Level:");
-		JLabel keysText = new JLabel("Keys Collected:");
+		JLabel levelText = new JLabel("Level: " + game.getLevel());
+		keysText = new JLabel("Keys Collected: " + game.getKeys().size());
 		JLabel treasureText = new JLabel("Treasure Remaining:");
 
 		JPanel info = new JPanel();
@@ -223,6 +232,14 @@ public class GUI {
 		p.add(new JPanel());
 		p.add(new JPanel());
 	}
+	
+	public void updateGUI() {
+				keysText = new JLabel("Keys Collected: " + game.getKeys().size());
+				infoPanel.repaint();
+
+		
+		
+	}
 
 	// Key Binding Classes
 	public class UpAction extends AbstractAction {
@@ -237,6 +254,7 @@ public class GUI {
 			game.move('u');
 			record.pastMoves("u");
 			rend.updateBoard(game);
+			updateGUI();
 		}
 	}
 
@@ -283,6 +301,15 @@ public class GUI {
 			game.move('r');
 			record.pastMoves("r");
 			rend.updateBoard(game);
+			keysText.setText("Keys Collected: " + game.getKeys().size());
+			try {
+				designPanel = createDesignPanel();
+				frame.add(designPanel);
+				frame.repaint();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -350,7 +377,10 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			changeColour(gamePanel);
+			rend.updateBoard(game);
+			changeColour(designPanel);
+			
+			System.out.println(game.getKeys().size());
 		}
 	}
 
