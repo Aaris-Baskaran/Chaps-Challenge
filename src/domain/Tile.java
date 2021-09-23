@@ -40,4 +40,8 @@ public abstract class Tile {
 	public Image getImage(){
 		return getImage("FreeTile.png");
 	}
+
+	public boolean isA(Class other){
+		return this.getClass() == other;
+	}
 }

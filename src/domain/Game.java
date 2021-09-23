@@ -2,6 +2,8 @@ package domain;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import persistency.State;
 
@@ -48,7 +50,7 @@ public class Game {
     /**
      * The keys chap has collected.
      */
-    private ArrayList<KeyTile> keys;
+    private Set<KeyTile> keys;
 
     /**
      * The last direction chap moved in - used for displaying the chap tile
@@ -72,7 +74,7 @@ public class Game {
 
         //Initialise treasure chest and chap's items
         treasureChest = new ArrayList<ChipTile>();
-        keys = new ArrayList<KeyTile>();
+        keys = new HashSet<KeyTile>();
         
         loadLevel(state);
 
@@ -208,6 +210,7 @@ public class Game {
         if(isValid(direction)){
             moveChap(direction);
             chapDirection = direction;
+            System.out.println("keys = " + keys);
         }
     }
 
@@ -232,12 +235,17 @@ public class Game {
 
     //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
-        chapPos = new Position(a, b);
-        theNextTile = maze[a][b];
-        Tile chap = maze[chapX][chapY];
-        setTile(a, b, chap);
-        setTile(chapX, chapY, currentTile);
-        currentTile = theNextTile;
+        chapPos = new Position(a, b);           //update chap position to the new position
+        theNextTile = maze[a][b];               //before moving, remember the tile on the position chap is moving onto
+        Tile chap = maze[chapX][chapY];         //get the chap tile
+        setTile(a, b, chap);                    //set the new position on the maze to the chap tile
+        setTile(chapX, chapY, currentTile);     //set the old position, where chap was, to the tile that was there before chap moved onto it
+        if(theNextTile.isA(KeyTile.class)){
+            currentTile = new FreeTile();       //if chap has stepped onto a key, then the key should disappear
+        }else {
+            currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
+        }
+
     }
 
     //Updates the specified tile in the maze array
@@ -276,13 +284,18 @@ public class Game {
     //checks if the next tile is a wall, or if its a locked door and chap has the key
     private boolean checkNextValid(Tile nextTile){
         //check if next tile is a wall
-        if (nextTile.getClass() == WallTile.class){
+        if (nextTile.isA(WallTile.class)){
             return false;
         }
 
         //if next tile is a locked door, check if chap has the key
-        if (nextTile.getClass() == LockedDoorTile.class && !hasKey(nextTile)){
+        if (nextTile.isA(LockedDoorTile.class) && !hasKey(nextTile)){
             return false;
+        }
+
+        //if next tile is a key, chap can move onto it. Also add the key to keys collection
+        if (nextTile.isA(KeyTile.class)){
+            keys.add((KeyTile)nextTile);
         }
 
         return true;
@@ -291,7 +304,7 @@ public class Game {
     //checks if chap has the key to a locked door
     private boolean hasKey(Tile door){
         for(KeyTile key: keys){
-            if(key.getColor() == ((KeyTile) door).getColor()){
+            if(key.getColor() == ((LockedDoorTile) door).getColor()){
                 return true;
             }
         }
@@ -312,7 +325,7 @@ public class Game {
      *
      * @return keys
      */
-    public ArrayList<KeyTile> getKeys(){
+    public Set<KeyTile> getKeys(){
         return keys;
     }
 
