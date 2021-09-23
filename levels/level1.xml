@@ -7,7 +7,7 @@
 	<Row>#_K___L__#</Row>
 	<Row>#_k___l__#</Row>
 	<Row>#________#</Row>
-	<Row>#____P___#</Row>
+	<Row>#_T__P___#</Row>
 	<Row>#________#</Row>
 	<Row>#_T___I__#</Row>
 	<Row>#_______X#</Row>
@@ -15,5 +15,5 @@
 	<X>5</X>
 	<Y>5</Y>
 	<Dir>d</Dir>
-	<Chips>10</Chips>
+	<Chips>2</Chips>
 </Game>

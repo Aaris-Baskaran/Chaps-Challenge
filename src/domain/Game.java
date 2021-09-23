@@ -239,9 +239,19 @@ public class Game {
         Tile chap = maze[chapX][chapY];         //get the chap tile
         setTile(a, b, chap);                    //set the new position on the maze to the chap tile
         setTile(chapX, chapY, currentTile);     //set the old position, where chap was, to the tile that was there before chap moved onto it
-        if(theNextTile.isA(KeyTile.class) || theNextTile.isA(ChipTile.class)){
+        if(theNextTile.isA(KeyTile.class)){
             currentTile = new FreeTile();       //if chap has stepped onto a key, then the key should disappear
-        }else {
+            keys.add((KeyTile)theNextTile);     //add the key to chaps collection
+        }
+        else if (theNextTile.isA(ChipTile.class)){
+            currentTile = new FreeTile();       //if chap has stepped onto a chip, then the chip should disappear
+            treasureChest.add((ChipTile)theNextTile);   //add the chip to treasure chest
+            chipsRemaining--;                           //update remaining chips
+            if (chipsRemaining == 0){                   //check if exit can be unlocked
+                unlockExit();
+            }
+        }
+        else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
 
@@ -283,24 +293,25 @@ public class Game {
     //checks if the next tile is a wall, or if its a locked door and chap has the key
     //also adds keys and chips to chaps collections
     private boolean checkNextValid(Tile nextTile){
-        //check if next tile is a wall
-        if (nextTile.isA(WallTile.class)){
-            return false;
+
+        if (nextTile.canMove) {
+            return true;
         }
-        //if next tile is a locked door, check if chap has the key
-        else if (nextTile.isA(LockedDoorTile.class) && !hasKey(nextTile)){
-            return false;
+        else if (nextTile.isA(LockedDoorTile.class) && hasKey(nextTile)){
+            return true;
         }
-        //if next tile is a key, chap can move onto it. Also add the key to keys collection
-        else if (nextTile.isA(KeyTile.class)){
-            keys.add((KeyTile)nextTile);
+
+        return false;
+    }
+
+    private void unlockExit() {
+        for (int i = 0; i < maze.length; i++){
+            for (int j = 0; j < maze.length; j++){
+                if (maze[i][j].isA(ExitTile.class)){
+                    ((ExitTile)maze[i][j]).setCanMove();
+                }
+            }
         }
-        //if next tile is a chip, chap can move onto it, add the chip to treasure chest, update no. of chipsRemaining
-        else if (nextTile.isA(ChipTile.class)){
-            treasureChest.add((ChipTile)nextTile);
-            chipsRemaining--;
-        }
-        return true;
     }
 
     //checks if chap has the key to a locked door

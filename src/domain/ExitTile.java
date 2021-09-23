@@ -13,7 +13,7 @@ public class ExitTile extends Tile{
 	 * can move onto the exit
 	 */
 	public ExitTile() {
-		canMove = true;
+		canMove = false;
 	}
 
 	/**
@@ -23,6 +23,16 @@ public class ExitTile extends Tile{
 	 */
 	@Override
 	public Image getImage() {
-		return getImage("ExitTile.png");
+		if (canMove){
+			return getImage("ExitTile.png");
+		}
+		return getImage("ExitLockTile.png");
+	}
+
+	/**
+	 * Setter for canMove field, will be called when all chips are collected,
+	 */
+	public void setCanMove(){
+		canMove = true;
 	}
 }
