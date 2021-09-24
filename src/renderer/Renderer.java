@@ -49,7 +49,7 @@ public class Renderer {
 							g.drawImage((Image) tile, j*60, i*60, 60, 60, this);
 						}
 					}
-				}	
+				}
 			}
 		};
 		
