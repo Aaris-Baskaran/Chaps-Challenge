@@ -57,6 +57,11 @@ public class Game {
     private static char chapDirection;
 
     /**
+     * The last direction bug moved in - used for displaying the bug tile
+     */
+    private static char bugDirection;
+
+    /**
      * Holds the current tile that chap is on
      */
     private Tile currentTile;
@@ -375,5 +380,14 @@ public class Game {
      */
     public static char getChapDirection() {
         return chapDirection;
+    }
+
+    /**
+     * Return the current direction of bug - for renderer to display the correct bug image
+     *
+     * @return direction
+     */
+    public static char getBugDirection() {
+        return bugDirection;
     }
 }
