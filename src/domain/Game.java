@@ -305,7 +305,22 @@ public class Game {
             return true;
         }
 
+        //PRECONDITION CHECKS
+        throwIllegalArgumentException(nextTile);
+
         return false;
+    }
+
+    private void throwIllegalArgumentException(Tile nextTile) throws IllegalArgumentException{
+        if (nextTile.isA(WallTile.class)){
+            throw new IllegalArgumentException("chap cannot be moved into a wall");
+        }
+        else if (nextTile.isA(LockedDoorTile.class)){
+            throw new IllegalArgumentException("chap cannot enter a locked door without the correct key");
+        }
+        else if (nextTile.isA(ExitTile.class)){
+            throw new IllegalArgumentException("chap cannot exit without collecting all treasures");
+        }
     }
 
     private void unlockExit() {
