@@ -248,16 +248,32 @@ public class Game {
             keys.add((KeyTile)theNextTile);     //add the key to chaps collection
         }
         else if (theNextTile.isA(ChipTile.class)){
-            currentTile = new FreeTile();       //if chap has stepped onto a chip, then the chip should disappear
-            treasureChest.add((ChipTile)theNextTile);   //add the chip to treasure chest
-            chipsRemaining--;                           //update remaining chips
-            if (chipsRemaining == 0){                   //check if exit can be unlocked
-                unlockExit();
-            }
+            collectTreasure();
         }
         else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
+
+    }
+
+    private void collectTreasure(){
+        //PRECONDITION CHECK
+        if (!theNextTile.isA(ChipTile.class)){
+            throw new IllegalStateException("there is no treasure here: " + theNextTile);
+        }
+        int uncollectedTreasureCount = chipsRemaining;
+
+        //PICK UP THE TREASURE
+        currentTile = new FreeTile();       //if chap has stepped onto a chip, then the chip should disappear
+        treasureChest.add((ChipTile)theNextTile);   //add the chip to treasure chest
+        chipsRemaining--;                           //update remaining chips
+        if (chipsRemaining == 0){                   //check if exit can be unlocked
+            unlockExit();
+        }
+
+        //POST-CONDITION CHECK
+        int uncollectedTreasureCount2 = chipsRemaining;
+        assert uncollectedTreasureCount2 == uncollectedTreasureCount-1;
 
     }
 
@@ -324,10 +340,11 @@ public class Game {
     }
 
     private void unlockExit() {
-        for (int i = 0; i < maze.length; i++){
-            for (int j = 0; j < maze.length; j++){
-                if (maze[i][j].isA(ExitTile.class)){
-                    ((ExitTile)maze[i][j]).setCanMove();
+        for (Tile[] tiles : maze) {
+            for (int j = 0; j < maze.length; j++) {
+                if (tiles[j].isA(ExitTile.class)) {
+                    ((ExitTile) tiles[j]).setCanMove();
+                    break;
                 }
             }
         }
