@@ -64,10 +64,10 @@ public class GUI {
 	public GUI() throws IOException {
 
 		gamePanel = rend.getPanel();
-		gamePanel.setPreferredSize(new Dimension(600,600));
+		gamePanel.setPreferredSize(new Dimension(540,540));
 
 		designPanel = design.designPanel;
-		designPanel.setPreferredSize(new Dimension(300,600));
+		designPanel.setPreferredSize(new Dimension(300,540));
 
 		// Key Press Actions
 		keyBindings();
