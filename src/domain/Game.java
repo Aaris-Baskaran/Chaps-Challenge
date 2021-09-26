@@ -147,11 +147,13 @@ public class Game {
 
     //Initialise the maze array for the level
     private void initMaze(String[] input) {
+
+        int dimensions = input.length;
+
+    	maze = new Tile[dimensions][dimensions];
     	
-    	maze = new Tile[10][10];
-    	
-    	for(int row = 0; row < 10; ++row) {
-    		for(int col = 0; col < 10; ++col) {
+    	for(int row = 0; row < dimensions; ++row) {
+    		for(int col = 0; col < dimensions; ++col) {
     			char c = input[col].charAt(row);
     			maze[row][col] = createTile(c);
     		}
