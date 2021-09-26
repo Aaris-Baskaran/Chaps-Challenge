@@ -25,7 +25,7 @@ import renderer.Renderer;
 
 /**
  * Graphic User Interface Class
- * 
+ *  
  * @author Stelio Brooky
  *
  */
@@ -35,6 +35,7 @@ public class GUI {
 	Game game = new Game(manager.loadState());	
 	Renderer rend = new Renderer(game);
 	Design design = new Design(game, manager);
+	
 	
 	JFrame frame = new JFrame("Chip vs Chap");
 	JPanel designPanel = new JPanel();
@@ -104,6 +105,7 @@ public class GUI {
 		
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem helpItem = new JMenuItem("See game instructions and controls");
+		helpItem.addActionListener((event) -> design.createHelp());
 
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);

@@ -35,6 +35,8 @@ public class Design {
 	public StateManager manager;
 	public JLabel keysText = new JLabel();
 	public JLabel treasureText = new JLabel();
+	public Help helpFrame;
+	public boolean isHelpActive = false;
 
 	public Design(Game game, StateManager manager) throws IOException {
 		this.game = game;
@@ -83,6 +85,7 @@ public class Design {
 		pause.addActionListener((event) -> JOptionPane.showMessageDialog(designPanel, "Paused"));
 		end.addActionListener((event) -> System.exit(0));
 		save.addActionListener((event) -> manager.SaveXML());
+		help.addActionListener((event) -> createHelp());
 		
 		buttons.add(pause);
 		buttons.add(end);
@@ -91,9 +94,17 @@ public class Design {
 
 		return buttons;
 	}
+	public void createHelp() {
+		if(isHelpActive) {
+			//Dispose so you can't open multiple help frames
+			helpFrame.frame.dispose();
+		}
+		isHelpActive = true;
+		helpFrame = new Help();		
+	}
 
 	public JPanel createInfoPanel() {
-		// Font f = new Font("SansSerif", Font.BOLD, 20);
+
 		ArrayList<JLabel> labels = new ArrayList<JLabel>();
 
 		JLabel timerText = new JLabel("Timer: " + game.getTime() + " seconds");
