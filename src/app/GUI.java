@@ -97,6 +97,16 @@ public class GUI {
 		exitItem.addActionListener((event) -> System.exit(0));
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
 
+		JMenu recordMenu = new JMenu("Record");
+		JMenuItem recordGame = new JMenuItem("Record and store this game");
+		recordGame.addActionListener((event) -> record.recordGame());
+		JMenuItem loadRecordedGame = new JMenuItem("Load the previous recorded game");
+		loadRecordedGame.addActionListener((event) -> record.loadRecordedGame());
+		
+		JMenu replayMenu = new JMenu("Replay");
+		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
+		replayGame.addActionListener((event) -> record.replayRecordedGame());
+		
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
@@ -111,6 +121,13 @@ public class GUI {
 		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
+		
+		recordMenu.add(recordGame);
+		recordMenu.add(loadRecordedGame);
+		menu.add(recordMenu);
+		
+		replayMenu.add(replayGame);
+		menu.add(replayMenu);
 
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
