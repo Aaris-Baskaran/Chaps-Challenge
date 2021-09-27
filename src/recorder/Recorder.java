@@ -30,6 +30,7 @@ public class Recorder {
 	 */
 	public void recordGame() {
 		// Change Arraylist of moves into XML file
+		System.out.print(totalMoves);
 		moves.clear();
 	}
 	
