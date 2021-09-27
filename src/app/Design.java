@@ -38,6 +38,14 @@ public class Design {
 	public Help helpFrame;
 	public boolean isHelpActive = false;
 
+	/**
+	 * 
+	 * Constructor
+	 * 
+	 * @param game
+	 * @param manager
+	 * @throws IOException
+	 */
 	public Design(Game game, StateManager manager) throws IOException {
 		this.game = game;
 		this.manager = manager;

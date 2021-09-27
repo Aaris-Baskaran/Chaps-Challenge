@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -30,18 +31,20 @@ import renderer.Renderer;
  *
  */
 public class GUI {
-	StateManager manager = new StateManager();
-	Recorder record = new Recorder();
-	Game game = new Game(manager.loadState());	
-	Renderer rend = new Renderer(game);
-	Design design = new Design(game, manager);
+	public StateManager manager = new StateManager();
+	public Recorder record = new Recorder();
+	public Game game = new Game(manager.loadState());	
+	public Renderer rend = new Renderer(game);
+	public Design design = new Design(game, manager);
 	
 	
-	JFrame frame = new JFrame("Chip vs Chap");
-	JPanel designPanel = new JPanel();
-	JPanel gamePanel = new JPanel();
-	JMenuBar menu = new JMenuBar();
-	Color bg = new Color(72, 204, 180);
+	public JFrame frame = new JFrame("Chip vs Chap");
+	public JPanel designPanel = new JPanel();
+	public JPanel gamePanel = new JPanel();
+	public JPanel recorderPanel = new JPanel();
+	public JMenuBar menu = new JMenuBar();
+	public Color bg = new Color(72, 204, 180);
+	public Color border = new Color(65, 46, 49);
 
 	/**
 	 * Actions for keys
@@ -105,7 +108,8 @@ public class GUI {
 		
 		JMenu replayMenu = new JMenu("Replay");
 		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
-		replayGame.addActionListener((event) -> record.replayRecordedGame());
+		replayGame.addActionListener((event) -> createRecorderPanel());
+
 		
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
@@ -137,6 +141,18 @@ public class GUI {
 		menu.add(helpMenu);
 
 		frame.setJMenuBar(menu);
+	}
+	
+	private void createRecorderPanel() {
+		record.replayRecordedGame();
+		
+		recorderPanel.setBackground(bg);
+		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
+		recorderPanel.setPreferredSize(new Dimension(840,100));
+		
+		frame.add(recorderPanel, BorderLayout.SOUTH);
+		frame.pack();
+		
 	}
 
 	private void keyBindings() {
@@ -317,6 +333,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			frame.remove(recorderPanel);
+			frame.pack();
 			System.out.println(record.moves);
 		}
 	}
