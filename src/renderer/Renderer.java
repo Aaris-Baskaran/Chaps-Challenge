@@ -16,6 +16,7 @@ public class Renderer {
 	
 	private JPanel board;
 	private ArrayList<Object> tileList = new ArrayList<Object>();
+	private Game game;
 	
 	/**
 	 * Renderer constructor
@@ -28,6 +29,7 @@ public class Renderer {
 				this.tileList.add(tile.getImage());
 			}
 		}
+		this.game = game;
 		createBoard();
 	}
 	
@@ -47,9 +49,11 @@ public class Renderer {
 						if (tileList.size() > 0) {
 							Object tile = tileList.get(i*10 + j);
 							g.drawImage((Image) tile, j*60, i*60, 60, 60, this);
+							System.out.println(i + " " + j + "\n");
 						}
 					}
 				}
+				
 			}
 		};
 		

@@ -42,8 +42,8 @@ public class StateManager {
 			String level = element.getElementsByTagName("Level").item(0).getTextContent();
 			String time = element.getElementsByTagName("Time").item(0).getTextContent();
 			
-			String[] maze = new String[10];
-			for(int row = 0; row < 10; ++row) {
+			String[] maze = new String[25];
+			for(int row = 0; row < 25; ++row) {
 				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
 			}
 			
