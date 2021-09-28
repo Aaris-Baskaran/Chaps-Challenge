@@ -77,6 +77,11 @@ public class Game {
     private boolean finished;
 
     /**
+     * Flag to indicate if chap is on an info tile.
+     */
+    private boolean onInfo;
+
+    /**
      * Constructor for the Game.
      */
     public Game(State state) {
@@ -219,6 +224,7 @@ public class Game {
 
     //Updates the maze for a chap move
     private void updateMaze(int a, int b, int chapX, int chapY){
+        onInfo = false;                         //reset var
         chapPos = new Position(a, b);           //update chap position to the new position
         theNextTile = maze[a][b];               //before moving, remember the tile on the position chap is moving onto
         Tile chap = maze[chapX][chapY];         //get the chap tile
@@ -233,6 +239,10 @@ public class Game {
         }
         else if (theNextTile.isA(ExitTile.class)){
             finished = true;
+        }
+        else if (theNextTile.isA(InfoTile.class)){
+            onInfo = true;
+            currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
         else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
@@ -414,5 +424,26 @@ public class Game {
      */
     public boolean isFinished(){
         return finished;
+    }
+
+    /**
+     * Used to check if the player is on an infoTile.
+     *
+     * @return onInfo
+     */
+    public boolean isOnInfo(){
+        return onInfo;
+    }
+
+    /**
+     * Return the message that the is displayed when player steps on the info tile.
+     *
+     * @return info
+     */
+    public String getInfo() {
+        if (level == 0){
+            return "Level 1 info";
+        }
+        return "Level 2 info";
     }
 }
