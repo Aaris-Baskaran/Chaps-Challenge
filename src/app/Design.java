@@ -35,6 +35,7 @@ public class Design {
 	public StateManager manager;
 	public JLabel keysText = new JLabel();
 	public JLabel treasureText = new JLabel();
+	public JLabel timerText = new JLabel();
 	public Help helpFrame;
 	public boolean isHelpActive = false;
 
@@ -115,7 +116,7 @@ public class Design {
 
 		ArrayList<JLabel> labels = new ArrayList<JLabel>();
 
-		JLabel timerText = new JLabel("Timer: " + game.getTime() + " seconds");
+		timerText = new JLabel("Timer: " + game.time + " seconds");
 		labels.add(timerText);
 		JLabel levelText = new JLabel("Level: " + game.getLevel());
 		labels.add(levelText);
@@ -162,6 +163,8 @@ public class Design {
 			treasure = "You have collected all of the chips. Door is open!";
 		}
 		treasureText.setText("<html><p style=\"width:100px\">" + treasure + "</p></html>");
+		timerText.setText("Timer: " + game.time + " seconds");
+		
 
 	}
 }

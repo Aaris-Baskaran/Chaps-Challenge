@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
 
 import domain.Game;
 import persistency.StateManager;
@@ -26,18 +28,17 @@ import renderer.Renderer;
 
 /**
  * Graphic User Interface Class
- *  
+ * 
  * @author Stelio Brooky
  *
  */
 public class GUI {
 	public StateManager manager = new StateManager();
 	public Recorder record = new Recorder();
-	public Game game = new Game(manager.loadState());	
+	public Game game = new Game(manager.loadState());
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
-	
-	
+
 	public JFrame frame = new JFrame("Chip vs Chap");
 	public JPanel designPanel = new JPanel();
 	public JPanel gamePanel = new JPanel();
@@ -45,6 +46,8 @@ public class GUI {
 	public JMenuBar menu = new JMenuBar();
 	public Color bg = new Color(72, 204, 180);
 	public Color border = new Color(65, 46, 49);
+	public Timer timer;
+	//public int timeLeft;
 
 	/**
 	 * Actions for keys
@@ -85,6 +88,26 @@ public class GUI {
 		frame.add(designPanel, BorderLayout.EAST);
 		frame.pack();
 		frame.setVisible(true);
+		
+		//timeLeft = game.getTime();
+		ActionListener timerAction =new ActionListener() {
+
+		    public void actionPerformed(ActionEvent ae) {
+		    	try {
+					design.update();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		        //do your task
+		    	game.time = game.time - 1;
+		        if(game.time==0) {
+		            timer.stop();//stop the task after do the work
+		            System.exit(0);
+		    }
+		    }
+		};
+		timer=new Timer(1000,timerAction );//create the timer which calls the actionperformed method for every 1000 millisecond(1 second=1000 millisecond)
+		timer.start();//start the task
 
 	}
 
@@ -105,18 +128,17 @@ public class GUI {
 		recordGame.addActionListener((event) -> record.recordGame());
 		JMenuItem loadRecordedGame = new JMenuItem("Load the previous recorded game");
 		loadRecordedGame.addActionListener((event) -> record.loadRecordedGame());
-		
+
 		JMenu replayMenu = new JMenu("Replay");
 		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
 		replayGame.addActionListener((event) -> createRecorderPanel());
 
-		
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
 		JMenuItem level2Item = new JMenuItem("Load Level 2");
 		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
-		
+
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem helpItem = new JMenuItem("See game instructions and controls");
 		helpItem.addActionListener((event) -> design.createHelp());
@@ -125,93 +147,53 @@ public class GUI {
 		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
-		
+
 		recordMenu.add(recordGame);
 		recordMenu.add(loadRecordedGame);
 		menu.add(recordMenu);
-		
+
 		replayMenu.add(replayGame);
 		menu.add(replayMenu);
 
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
 		menu.add(levelMenu);
-		
+
 		helpMenu.add(helpItem);
 		menu.add(helpMenu);
 
 		frame.setJMenuBar(menu);
 	}
-	
+
 	private void createRecorderPanel() {
 		record.replayRecordedGame();
-		
+
 		recorderPanel.setBackground(bg);
 		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
-		recorderPanel.setPreferredSize(new Dimension(840,100));
-		
+		recorderPanel.setPreferredSize(new Dimension(840, 100));
+
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
-		
+
 	}
-	
+
+	/**
+	 * i like to move it move it
+	 * 
+	 * @param dir
+	 */
 	public void move(char dir) {
-		if (dir == 'u') {
-			moveUp();
-		}
-		else if (dir == 'd') {
-			moveDown();
-		}
-		else if (dir == 'l') {
-			moveLeft();
-		}
-		else if (dir == 'r') {
-			moveRight();
-		}
-	}
-
-	private void moveRight() {
-		game.move('r');
+		game.move(dir);
 		rend.updateBoard(game);
 		try {
 			design.update();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	}
-
-	private void moveLeft() {
-		game.move('l');
-		rend.updateBoard(game);
-		try {
-			design.update();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}	
-	}
-
-	private void moveDown() {
-		game.move('d');
-		rend.updateBoard(game);
-		try {
-			design.update();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (game.isFinished()) {
+			System.exit(0);
 		}
-	}
 
-	private void moveUp() {
-		game.move('u');
-		rend.updateBoard(game);
-		try {
-			design.update();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	private void keyBindings() {
@@ -242,19 +224,24 @@ public class GUI {
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
 		designPanel.getActionMap().put("spaceAction", spaceAction);
 		// control s combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
 		designPanel.getActionMap().put("ctrlSAction", ctrlSAction);
 		// control x combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
 		designPanel.getActionMap().put("ctrlXAction", ctrlXAction);
 		// control r combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
 		designPanel.getActionMap().put("ctrlRAction", ctrlRAction);
 		// control 1 combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
 		designPanel.getActionMap().put("ctrl1Action", ctrl1Action);
 		// control 2 combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
 	}
 
@@ -269,7 +256,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			record.pastMoves("u");
-			moveUp();
+			move('u');
 		}
 	}
 
@@ -282,7 +269,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			moveDown();
+			move('d');
 			record.pastMoves("d");
 		}
 	}
@@ -296,7 +283,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			moveLeft();
+			move('l');
 			record.pastMoves("l");
 		}
 	}
@@ -310,7 +297,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			moveRight();
+			move('r');
 			record.pastMoves("r");
 		}
 	}
@@ -379,8 +366,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		
-			
+
 		}
 	}
 
@@ -393,7 +379,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 		}
 	}
 }
