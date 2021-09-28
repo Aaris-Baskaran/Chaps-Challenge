@@ -43,7 +43,7 @@ public class Help {
 		JLabel header = new JLabel("Help");
 		header.setFont(new Font("", Font.BOLD, 30));
 
-		String display = "Welcome to the instructions and help section of Chip vs Chap. The aim of the game is to collect all of the chips and get to the exit before the time runs out. In order to do this, you must avoid bugs, find keys and in Level 2, use portals to reach all the chips. Good Luck!";
+		String display = "Welcome to the instructions and help section of Chip vs Chap. The aim of the game is to collect all of the chips and get to the exit before the time runs out. In order to do this, you must find keys, navigate the maze and in Level 2, use portals and avoid bugs to reach all the chips. Good Luck!";
 		JLabel mainText = new JLabel(("<html><p style=\"width:125px\">" + display + "</p></html>"));
 		
 		JLabel controlHeader = new JLabel("Controls");

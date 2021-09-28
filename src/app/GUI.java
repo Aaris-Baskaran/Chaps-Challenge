@@ -154,6 +154,65 @@ public class GUI {
 		frame.pack();
 		
 	}
+	
+	public void move(char dir) {
+		if (dir == 'u') {
+			moveUp();
+		}
+		else if (dir == 'd') {
+			moveDown();
+		}
+		else if (dir == 'l') {
+			moveLeft();
+		}
+		else if (dir == 'r') {
+			moveRight();
+		}
+	}
+
+	private void moveRight() {
+		game.move('r');
+		rend.updateBoard(game);
+		try {
+			design.update();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	private void moveLeft() {
+		game.move('l');
+		rend.updateBoard(game);
+		try {
+			design.update();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+	}
+
+	private void moveDown() {
+		game.move('d');
+		rend.updateBoard(game);
+		try {
+			design.update();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	private void moveUp() {
+		game.move('u');
+		rend.updateBoard(game);
+		try {
+			design.update();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	private void keyBindings() {
 		upAction = new UpAction();
@@ -209,15 +268,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('u');
 			record.pastMoves("u");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			moveUp();
 		}
 	}
 
@@ -230,15 +282,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('d');
+			moveDown();
 			record.pastMoves("d");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
 	}
 
@@ -251,15 +296,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('l');
+			moveLeft();
 			record.pastMoves("l");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
 	}
 
@@ -272,15 +310,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('r');
+			moveRight();
 			record.pastMoves("r");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 		}
 	}
 
