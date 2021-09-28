@@ -14,6 +14,7 @@ import domain.*;
  */
 public class Renderer {
 	
+	// Display fields
 	private JPanel board;
 	private ArrayList<Object> tileList = new ArrayList<Object>();
 	private Game game;
