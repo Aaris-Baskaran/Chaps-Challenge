@@ -72,6 +72,11 @@ public class Game {
     private Tile theNextTile;
 
     /**
+     * Flag to indicate if the level is finished.
+     */
+    private boolean finished;
+
+    /**
      * Constructor for the Game.
      */
     public Game(State state) {
@@ -114,35 +119,9 @@ public class Game {
         //Reset treasure chest and items chap has picked up
         treasureChest.clear();
         keys.clear();
-    }
 
-    private void tempInitMaze() {
-
-        maze = new Tile[10][10];
-
-        for (int i = 0; i < 10; i++){
-            maze[0][i] = new WallTile();
-        }
-
-        for (int i = 0; i < 10; i++){
-            maze[9][i] = new WallTile();
-        }
-
-        for (int i = 1; i < 9; i++){
-            maze[i][0] = new WallTile();
-        }
-
-        for (int i = 1; i < 9; i++){
-            maze[i][9] = new WallTile();
-        }
-
-        for (int i = 1; i < 9; i++){
-            for (int j = 1; j < 9; j++){
-                maze[j][i] = new FreeTile();
-            }
-        }
-
-        maze[5][5] = new ChapTile();
+        //reset var
+        finished = false;
     }
 
     //Initialise the maze array for the level
@@ -251,6 +230,9 @@ public class Game {
         }
         else if (theNextTile.isA(ChipTile.class)){
             collectTreasure();
+        }
+        else if (theNextTile.isA(ExitTile.class)){
+            finished = true;
         }
         else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
@@ -423,5 +405,14 @@ public class Game {
      */
     public static char getBugDirection() {
         return bugDirection;
+    }
+
+    /**
+     * Used to check if the player has finished the level or not.
+     *
+     * @return finished
+     */
+    public boolean isFinished(){
+        return finished;
     }
 }
