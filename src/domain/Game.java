@@ -22,10 +22,10 @@ public class Game {
     private int level;
 
     /**
-     * The total time allowed for the level
+     * The time remaining in the level
      */
 
-    private int maxTime;
+    public int time;
     /**
      * The maze, a 2D array of Tiles.
      */
@@ -82,6 +82,11 @@ public class Game {
     private boolean onInfo;
 
     /**
+     * Positions of the portals
+     */
+    private Position portalPos0;
+    private Position portalPos1;
+    /**
      * Constructor for the Game.
      */
     public Game(State state) {
@@ -106,7 +111,7 @@ public class Game {
         level = state.getLevelNum();
 
         //Set the time allowed for the level
-        maxTime = state.getTime();
+        time = state.getTime();
 
         //Set the total number of chips
         chipsRemaining = state.getChipsLeft();
@@ -127,6 +132,27 @@ public class Game {
 
         //reset var
         finished = false;
+
+        //find portal positions
+        setPortalPositions();
+    }
+
+    private void setPortalPositions() {
+        int i = 0;
+        for (Tile[] tiles : maze) {
+            for (int j = 0; j < maze.length; j++) {
+                if (tiles[j].isA(PortalTile.class)) {
+                    if (((PortalTile) tiles[j]).portalNum == 0){
+                        portalPos0 = new Position(i,j);
+                    }
+                    else if (((PortalTile) tiles[j]).portalNum == 1){
+                        portalPos1 = new Position(i,j);
+                    }
+                    break;
+                }
+            }
+            i++;
+        }
     }
 
     //Initialise the maze array for the level
@@ -146,7 +172,7 @@ public class Game {
 
     //Returns a Tile to add into the maze
     private Tile createTile(char c) {
-        if(c == 'P') {
+        if(c == 'C') {
             return new ChapTile();
         }
     	else if(c == '_') {
@@ -175,6 +201,12 @@ public class Game {
         }
         else if(c == 'I'){
             return new InfoTile();
+        }
+        else if(c == 'P'){
+            return new PortalTile(0);
+        }
+        else if(c == 'p'){
+            return new PortalTile(1);
         }
 
     	return null;
@@ -244,10 +276,23 @@ public class Game {
             onInfo = true;
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
+        else if (theNextTile.isA(PortalTile.class)){
+            enterPortal((PortalTile) theNextTile);
+            currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
+        }
         else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
 
+    }
+
+    private void enterPortal(PortalTile portal) {
+//        if (portal.portalNum == 0){
+//            chapPos = new Position(portalPos0.getX(), portalPos0.getY()-1);
+//        }
+//        else if (portal.portalNum == 1){
+//            chapPos = new Position(portalPos1.getX(), portalPos1.getY()-1);
+//        }
     }
 
     private void collectTreasure(){
@@ -361,15 +406,6 @@ public class Game {
      */
     public int getLevel() {
         return level;
-    }
-    
-    /**
-     * Get the maximum time.
-     *
-     * @return maxTime
-     */
-    public int getTime() {
-        return maxTime;
     }
 
     /**

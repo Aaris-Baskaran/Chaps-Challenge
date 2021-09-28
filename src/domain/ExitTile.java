@@ -1,6 +1,6 @@
 package domain;
 
-import java.awt.*;
+import java.awt.Image;
 
 /**
  * Represents the exit of the level.
