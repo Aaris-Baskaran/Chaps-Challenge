@@ -148,7 +148,6 @@ public class Game {
                     else if (((PortalTile) tiles[j]).portalNum == 1){
                         portalPos1 = new Position(i,j);
                     }
-                    break;
                 }
             }
             i++;
@@ -277,8 +276,8 @@ public class Game {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
         else if (theNextTile.isA(PortalTile.class)){
-            enterPortal((PortalTile) theNextTile);
-            currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
+            enterPortal((PortalTile) theNextTile, a, b);
+
         }
         else {
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
@@ -286,13 +285,21 @@ public class Game {
 
     }
 
-    private void enterPortal(PortalTile portal) {
-//        if (portal.portalNum == 0){
-//            chapPos = new Position(portalPos0.getX(), portalPos0.getY()-1);
-//        }
-//        else if (portal.portalNum == 1){
-//            chapPos = new Position(portalPos1.getX(), portalPos1.getY()-1);
-//        }
+    private void enterPortal(PortalTile portal, int chapX, int chapY) {
+        currentTile = portal;                                                   // set remember the tile that chap stepped onto as the current tile
+
+        if (portal.portalNum == 0){
+            chapPos = new Position(portalPos1.getX(), portalPos1.getY()-1);      //update chap position to the new position
+        }
+        else if (portal.portalNum == 1){
+            chapPos = new Position(portalPos0.getX(), portalPos0.getY()-1);      //update chap position to the new position
+        }
+
+        theNextTile = maze[chapPos.getX()][chapPos.getY()];                     //before moving, remember the tile on the position chap is moving onto
+        Tile chap = maze[chapX][chapY];                                         //get the chap tile
+        setTile(chapPos.getX(), chapPos.getY(), chap);                          //set the new position on the maze to the chap tile
+        setTile(chapX, chapY, currentTile);                                     //set the old position, where chap was, to the tile that was there before chap moved onto it
+        currentTile = theNextTile;
     }
 
     private void collectTreasure(){
