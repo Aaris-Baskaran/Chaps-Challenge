@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import persistency.State;
+import renderer.SoundEffect;
 
 /**
  * This module is responsible for representing and maintaining the state of the game, 
@@ -234,6 +235,35 @@ public class Game {
         }
     }
 
+    private void playSound(char tile) {
+        SoundEffect s;
+
+        if (tile == 'X'){
+            s = new SoundEffect("ExitJingle.wav");
+        }
+        else if (tile == 'W'){
+            s = new SoundEffect("HittingWall.wav");
+        }
+        else if (tile == 'I'){
+            s = new SoundEffect("InfoField.wav");
+        }
+        else if (tile == 'K' || tile == 'k'){
+            s = new SoundEffect("KeyCollected.wav");
+        }
+        else if (tile == 'P' || tile == 'p'){
+            s = new SoundEffect("PortalSound.wav");
+        }
+        else if (tile == 'T'){
+            s = new SoundEffect("TreasureCollected.wav");
+        }
+        else {//(tile == 'L' || tile == 'l') {
+            s = new SoundEffect("UnlockDoor.wav");
+        }
+
+        s.playSound();
+
+    }
+
     //Moves chap in the specified direction
     private void moveChap(char direction){
         int x = chapPos.getX();
@@ -262,20 +292,25 @@ public class Game {
         setTile(a, b, chap);                    //set the new position on the maze to the chap tile
         setTile(chapX, chapY, currentTile);     //set the old position, where chap was, to the tile that was there before chap moved onto it
         if(theNextTile.isA(KeyTile.class)){
+            playSound('K');
             currentTile = new FreeTile();       //if chap has stepped onto a key, then the key should disappear
             keys.add((KeyTile)theNextTile);     //add the key to chaps collection
         }
         else if (theNextTile.isA(ChipTile.class)){
+            playSound('T');
             collectTreasure();
         }
         else if (theNextTile.isA(ExitTile.class)){
+            playSound('X');
             finished = true;
         }
         else if (theNextTile.isA(InfoTile.class)){
+            playSound('I');
             onInfo = true;
             currentTile = theNextTile;          // set remember the tile that chap stepped onto as the current tile
         }
         else if (theNextTile.isA(PortalTile.class)){
+            playSound('P');
             enterPortal((PortalTile) theNextTile, a, b);
 
         }
@@ -364,6 +399,7 @@ public class Game {
             return true;
         }
         else if (nextTile.isA(LockedDoorTile.class) && hasKey(nextTile)){
+            playSound('L');
             return true;
         }
 
@@ -374,6 +410,7 @@ public class Game {
     }
 
     private void throwIllegalArgumentException(Tile nextTile) throws IllegalArgumentException{
+        playSound('W');
         if (nextTile.isA(WallTile.class)){
             throw new IllegalArgumentException("chap cannot be moved into a wall");
         }
@@ -383,6 +420,7 @@ public class Game {
         else if (nextTile.isA(ExitTile.class)){
             throw new IllegalArgumentException("chap cannot exit without collecting all treasures");
         }
+
     }
 
     private void unlockExit() {
@@ -394,6 +432,7 @@ public class Game {
                 }
             }
         }
+        playSound('L');
     }
 
     //checks if chap has the key to a locked door
