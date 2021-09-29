@@ -114,7 +114,7 @@ public class GUI {
 	private void createMenuBar() {
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem saveItem = new JMenuItem("Save and Quit");
-		saveItem.addActionListener((event) -> manager.SaveXML());
+		saveItem.addActionListener((event) -> manager.SaveXML(game));
 		saveItem.addActionListener((event) -> System.exit(0));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		JMenuItem loadItem = new JMenuItem("Load Saved Game");
@@ -132,11 +132,13 @@ public class GUI {
 		JMenu replayMenu = new JMenu("Replay");
 		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
 		replayGame.addActionListener((event) -> createRecorderPanel());
-
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
+		level1Item.addActionListener((event) -> ctrl1Action.actionPerformed(event));
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
+		
 		JMenuItem level2Item = new JMenuItem("Load Level 2");
+		level2Item.addActionListener((event) -> ctrl2Action.actionPerformed(event));
 		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
 
 		JMenu helpMenu = new JMenu("Help");
@@ -324,7 +326,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			manager.SaveXML();
+			manager.SaveXML(game);
 			System.exit(0);
 		}
 	}
