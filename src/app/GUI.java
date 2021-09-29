@@ -35,7 +35,7 @@ import renderer.Renderer;
 public class GUI {
 	public StateManager manager = new StateManager();
 	public Recorder record = new Recorder();
-	public Game game = new Game(manager.loadState());
+	public Game game = new Game(manager.getLevels().get(1));
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
 
@@ -366,7 +366,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			game.loadLevel(manager.getLevels().get(1));
+			rend.updateBoard(game);
 		}
 	}
 
@@ -379,7 +380,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			game.loadLevel(manager.getLevels().get(2));
+			rend.updateBoard(game);
 		}
 	}
 }
