@@ -101,7 +101,7 @@ public class Design {
 			}
 		});
 		end.addActionListener((event) -> System.exit(0));
-		save.addActionListener((event) -> manager.SaveXML());
+		save.addActionListener((event) -> manager.SaveXML(game));
 		help.addActionListener((event) -> createHelp());
 
 		buttons.add(pause);

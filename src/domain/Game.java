@@ -414,6 +414,15 @@ public class Game {
     public int getLevel() {
         return level;
     }
+    
+    /**
+     * Get the current time.
+     *
+     * @return level
+     */
+    public int getTime() {
+        return time;
+    }
 
     /**
      * Get the keys that have been collected.
