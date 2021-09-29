@@ -231,6 +231,7 @@ public class Game {
         if(isValid(direction)){
             moveChap(direction);
             chapDirection = direction;
+            System.out.println(toString());
         }
     }
 
@@ -489,4 +490,24 @@ public class Game {
         }
         return "Level 2 info";
     }
+
+    /**
+     * Returns the current maze as a formatted String.
+     *
+     * @return ret
+     */
+    public String toString(){
+        String ret = "";
+
+        int i = 0;
+        for (Tile[] tiles : maze) {
+            for (int j = 0; j < maze.length; j++) {
+                ret += maze[j][i].toString();
+            }
+            ret += "\n";
+            i++;
+        }
+        return ret;
+    }
+
 }

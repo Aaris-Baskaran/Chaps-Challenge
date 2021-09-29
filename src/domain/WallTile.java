@@ -27,4 +27,9 @@ public class WallTile extends Tile{
 		return getImage("WallTile.png");
 	}
 
+	@Override
+	public String toString() {
+		return "#";
+	}
+
 }

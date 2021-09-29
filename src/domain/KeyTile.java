@@ -44,4 +44,12 @@ public class KeyTile extends Tile {
 		}
 		return getImage("YellowKeyTile.png");
 	}
+
+	@Override
+	public String toString() {
+		if (color == Color.BLUE){
+			return "k";
+		}
+		return "K";
+	}
 }

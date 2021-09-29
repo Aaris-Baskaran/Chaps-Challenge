@@ -35,4 +35,11 @@ public class ExitTile extends Tile{
 	public void setCanMove(){
 		canMove = true;
 	}
+
+	public String toString(){
+		if(canMove){
+			return "x";
+		}
+		return "X";
+	}
 }

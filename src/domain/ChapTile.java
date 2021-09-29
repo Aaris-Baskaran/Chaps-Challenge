@@ -40,4 +40,9 @@ public class ChapTile extends Tile{
 			return getImage("ChapRightWithMaskTile.png");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "C";
+	}
 }

@@ -29,4 +29,11 @@ public class PortalTile extends Tile{
     public Image getImage() {
         return getImage("PortalTile.png");
     }
+
+    public String toString(){
+        if (portalNum == 0){
+            return "P";
+        }
+        return "p";
+    }
 }
