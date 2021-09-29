@@ -1,6 +1,7 @@
 package persistency;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.TreeMap;
@@ -12,6 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
+import domain.Game;
 
 public class StateManager {
 	
@@ -90,14 +93,37 @@ public class StateManager {
 		return state;		
 	}
 	
-	public void SaveXML() {
+	public void SaveXML(Game game) {
 		try {
 			File saved = new File("levels/saved.xml");
 			saved.createNewFile();
+			
+			FileWriter writer = new FileWriter(saved);
+			writer.write("<?xml version = \"1.0\"?>\n");
+			writer.write("<Game>\n");
+			writer.write("	<Level>" + game.getLevel() + "</Level>\n");
+			writer.write("	<Time>" + game.getTime() + "</Time>\n");
+			
+			String[] maze = game.toString().split("\n");
+			for(int row = 0; row < 25; ++row) {
+				writer.write("	<Row>");
+					writer.write(maze[row]);
+				writer.write("</Row>\n");
+			}
+			
+			writer.write("	<X>" + game.getChapPos().getX() + "</X>\n");
+			writer.write("	<Y>" + game.getChapPos().getY() + "</Y>\n");
+			writer.write("	<Dir>" + Game.getChapDirection() + "</Dir>\n");
+			writer.write("	<Chips>" + game.getChipsRemaining() + "</Chips>\n");
+			
+			writer.write("</Game>\n");
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+
 	
 	public TreeMap<Integer, State> getLevels() {
 		return levels;
