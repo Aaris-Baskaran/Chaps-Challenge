@@ -113,7 +113,7 @@ public class GUI {
 	private void createMenuBar() {
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem saveItem = new JMenuItem("Save and Quit");
-		saveItem.addActionListener((event) -> manager.SaveXML(game));
+		saveItem.addActionListener((event) -> manager.SaveXML());
 		saveItem.addActionListener((event) -> System.exit(0));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		JMenuItem loadItem = new JMenuItem("Load Saved Game");
@@ -334,7 +334,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			manager.SaveXML(game);
+			manager.SaveXML();
 			System.exit(0);
 		}
 	}
@@ -378,6 +378,12 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			game.loadLevel(manager.getLevels().get(1));
 			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -392,6 +398,12 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			game.loadLevel(manager.getLevels().get(2));
 			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 }
