@@ -11,6 +11,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * Class for the help frame when the help button is pressed
+ * 
+ * @author brook
+ *
+ */
+
 public class Help {
 
 	public JFrame frame = new JFrame();
@@ -49,7 +57,7 @@ public class Help {
 		JLabel controlHeader = new JLabel("Controls");
 		controlHeader.setFont(new Font("", Font.BOLD, 30));
 		
-		String controls1 = "ARROW KEYS = Move Chap	SPACE = Pause";
+		String controls1 = "ARROW KEYS = Move Chap";
 		JLabel controlText1 = new JLabel(("<html><p style=\"width:125px\">" + controls1 + "</p></html>"));
 		
 		String controls2 = "Use the Menu Bar to see alternate options and keyboard shortcuts.";

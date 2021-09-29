@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
@@ -47,7 +46,6 @@ public class GUI {
 	public Color bg = new Color(72, 204, 180);
 	public Color border = new Color(65, 46, 49);
 	public Timer timer;
-	//public int timeLeft;
 
 	/**
 	 * Actions for keys
@@ -71,10 +69,10 @@ public class GUI {
 	public GUI() throws IOException {
 
 		gamePanel = rend.getPanel();
-		gamePanel.setPreferredSize(new Dimension(540,540));
+		gamePanel.setPreferredSize(new Dimension(540, 540));
 
 		designPanel = design.designPanel;
-		designPanel.setPreferredSize(new Dimension(300,540));
+		designPanel.setPreferredSize(new Dimension(300, 540));
 
 		// Key Press Actions
 		keyBindings();
@@ -82,32 +80,33 @@ public class GUI {
 		// Initialize the menu bar
 		createMenuBar();
 
-		frame.setLayout(new BorderLayout());		
+		frame.setLayout(new BorderLayout());
 		frame.setResizable(false);
 		frame.add(gamePanel, BorderLayout.WEST);
 		frame.add(designPanel, BorderLayout.EAST);
 		frame.pack();
 		frame.setVisible(true);
-		
-		//timeLeft = game.getTime();
-		ActionListener timerAction =new ActionListener() {
 
-		    public void actionPerformed(ActionEvent ae) {
-		    	try {
+		ActionListener timerAction = new ActionListener() {
+
+			public void actionPerformed(ActionEvent ae) {
+				try {
 					design.update();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-		        //do your task
-		    	game.time = game.time - 1;
-		        if(game.time==0) {
-		            timer.stop();//stop the task after do the work
-		            System.exit(0);
-		    }
-		    }
+				// turn the clock down if the game isnt paused
+				if (!design.isPaused) {
+					game.time = game.time - 1;
+				}
+				if (game.time < 1) {
+					timer.stop();// stop the timer after the time is out
+					System.exit(0);
+				}
+			}
 		};
-		timer=new Timer(1000,timerAction );//create the timer which calls the actionperformed method for every 1000 millisecond(1 second=1000 millisecond)
-		timer.start();//start the task
+		timer = new Timer(1000, timerAction);// create the timer which calls the actionperformed method for every second
+		timer.start();// start the task
 
 	}
 
@@ -243,6 +242,7 @@ public class GUI {
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
 				.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
+
 	}
 
 	// Key Binding Classes
@@ -255,8 +255,10 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			record.pastMoves("u");
-			move('u');
+			if (!design.isPaused) {
+				record.pastMoves("u");
+				move('u');
+			}
 		}
 	}
 
@@ -269,8 +271,10 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			move('d');
-			record.pastMoves("d");
+			if (!design.isPaused) {
+				move('d');
+				record.pastMoves("d");
+			}
 		}
 	}
 
@@ -283,8 +287,10 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			move('l');
-			record.pastMoves("l");
+			if (!design.isPaused) {
+				move('l');
+				record.pastMoves("l");
+			}
 		}
 	}
 
@@ -297,8 +303,10 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			move('r');
-			record.pastMoves("r");
+			if (!design.isPaused) {
+				move('r');
+				record.pastMoves("r");
+			}
 		}
 	}
 
@@ -311,7 +319,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(designPanel, "Paused");
+			design.isPaused = !design.isPaused;
 		}
 	}
 

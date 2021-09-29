@@ -13,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import domain.Game;
@@ -38,6 +37,7 @@ public class Design {
 	public JLabel timerText = new JLabel();
 	public Help helpFrame;
 	public boolean isHelpActive = false;
+	public boolean isPaused = false;
 
 	/**
 	 * 
@@ -89,13 +89,20 @@ public class Design {
 		help.setBorder(BorderFactory.createLineBorder(border, 2));
 		JButton save = new JButton("Save");
 		save.setBorder(BorderFactory.createLineBorder(border, 2));
-		
+
 		// surely give us extra marks for lambda please :)
-		pause.addActionListener((event) -> JOptionPane.showMessageDialog(designPanel, "Paused"));
+		pause.addActionListener((event) -> isPaused = !isPaused);
+		pause.addActionListener((event) -> {
+			try {
+				update();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 		end.addActionListener((event) -> System.exit(0));
 		save.addActionListener((event) -> manager.SaveXML());
 		help.addActionListener((event) -> createHelp());
-		
+
 		buttons.add(pause);
 		buttons.add(end);
 		buttons.add(help);
@@ -103,13 +110,14 @@ public class Design {
 
 		return buttons;
 	}
+
 	public void createHelp() {
-		if(isHelpActive) {
-			//Dispose so you can't open multiple help frames
+		if (isHelpActive) {
+			// Dispose so you can't open multiple help frames
 			helpFrame.frame.dispose();
 		}
 		isHelpActive = true;
-		helpFrame = new Help();		
+		helpFrame = new Help();
 	}
 
 	public JPanel createInfoPanel() {
@@ -163,8 +171,13 @@ public class Design {
 			treasure = "You have collected all of the chips. Door is open!";
 		}
 		treasureText.setText("<html><p style=\"width:100px\">" + treasure + "</p></html>");
-		timerText.setText("Timer: " + game.time + " seconds");
-		
+
+		if (isPaused) {
+			String time = "Timer: " + game.time + " seconds THE GAME IS CURRENTLY PAUSED";
+			timerText.setText("<html><p style=\"width:100px\">" + time + "</p></html>");
+		} else {
+			timerText.setText("Timer: " + game.time + " seconds");
+		}
 
 	}
 }
