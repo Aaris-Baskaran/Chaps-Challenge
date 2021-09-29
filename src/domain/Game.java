@@ -231,7 +231,6 @@ public class Game {
         if(isValid(direction)){
             moveChap(direction);
             chapDirection = direction;
-            System.out.println(toString());
         }
     }
 
