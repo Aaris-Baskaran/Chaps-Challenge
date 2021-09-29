@@ -32,7 +32,7 @@ import renderer.Renderer;
  */
 public class GUI {
 	public StateManager manager = new StateManager();
-	public Recorder record = new Recorder();
+	public Recorder record = new Recorder(this);
 	public Game game = new Game(manager.loadState());	
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
@@ -145,11 +145,7 @@ public class GUI {
 	
 	private void createRecorderPanel() {
 		record.replayRecordedGame();
-		
-		recorderPanel.setBackground(bg);
-		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
-		recorderPanel.setPreferredSize(new Dimension(840,100));
-		
+		recorderPanel=record.replayRecordedGame();
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
 		
