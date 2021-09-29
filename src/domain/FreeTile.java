@@ -24,4 +24,9 @@ public class FreeTile extends Tile{
 	public Image getImage() {
 		return getImage("FreeTile.png");
 	}
+
+	@Override
+	public String toString() {
+		return "_";
+	}
 }

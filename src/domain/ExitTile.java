@@ -1,6 +1,6 @@
 package domain;
 
-import java.awt.*;
+import java.awt.Image;
 
 /**
  * Represents the exit of the level.
@@ -34,5 +34,12 @@ public class ExitTile extends Tile{
 	 */
 	public void setCanMove(){
 		canMove = true;
+	}
+
+	public String toString(){
+		if(canMove){
+			return "x";
+		}
+		return "X";
 	}
 }

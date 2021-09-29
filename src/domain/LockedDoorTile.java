@@ -44,4 +44,11 @@ public class LockedDoorTile extends Tile {
 		}
 		return getImage("YellowLockedDoorTile.png");
 	}
+
+	public String toString() {
+		if (color == Color.BLUE){
+			return "l";
+		}
+		return "L";
+	}
 }

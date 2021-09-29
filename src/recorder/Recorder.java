@@ -117,7 +117,7 @@ public class Recorder {
 	public void loadRecordedGame() {
 		// Pass the recorded game to GUI.
 		StateManager m = new StateManager();
-		m.loadState();
+		//m.loadState();
 	}
 	
 	/*

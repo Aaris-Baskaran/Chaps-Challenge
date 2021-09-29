@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
@@ -15,9 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
 
 import domain.Game;
 import persistency.StateManager;
@@ -26,18 +27,22 @@ import renderer.Renderer;
 
 /**
  * Graphic User Interface Class
- *  
+ * 
  * @author Stelio Brooky
  *
  */
 public class GUI {
 	public StateManager manager = new StateManager();
+<<<<<<< HEAD
 	public Recorder record = new Recorder(this);
 	public Game game = new Game(manager.loadState());	
+=======
+	public Recorder record = new Recorder();
+	public Game game = new Game(manager.getLevels().get(1));
+>>>>>>> 67acad95b017e0aa312544b665b153bcd4449c47
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
-	
-	
+
 	public JFrame frame = new JFrame("Chip vs Chap");
 	public JPanel designPanel = new JPanel();
 	public JPanel gamePanel = new JPanel();
@@ -45,6 +50,7 @@ public class GUI {
 	public JMenuBar menu = new JMenuBar();
 	public Color bg = new Color(72, 204, 180);
 	public Color border = new Color(65, 46, 49);
+	public Timer timer;
 
 	/**
 	 * Actions for keys
@@ -68,10 +74,10 @@ public class GUI {
 	public GUI() throws IOException {
 
 		gamePanel = rend.getPanel();
-		gamePanel.setPreferredSize(new Dimension(540,540));
+		gamePanel.setPreferredSize(new Dimension(540, 540));
 
 		designPanel = design.designPanel;
-		designPanel.setPreferredSize(new Dimension(300,540));
+		designPanel.setPreferredSize(new Dimension(300, 540));
 
 		// Key Press Actions
 		keyBindings();
@@ -79,12 +85,33 @@ public class GUI {
 		// Initialize the menu bar
 		createMenuBar();
 
-		frame.setLayout(new BorderLayout());		
+		frame.setLayout(new BorderLayout());
 		frame.setResizable(false);
 		frame.add(gamePanel, BorderLayout.WEST);
 		frame.add(designPanel, BorderLayout.EAST);
 		frame.pack();
 		frame.setVisible(true);
+
+		ActionListener timerAction = new ActionListener() {
+
+			public void actionPerformed(ActionEvent ae) {
+				try {
+					design.update();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				// turn the clock down if the game isnt paused
+				if (!design.isPaused) {
+					game.time = game.time - 1;
+				}
+				if (game.time < 1) {
+					timer.stop();// stop the timer after the time is out
+					System.exit(0);
+				}
+			}
+		};
+		timer = new Timer(1000, timerAction);// create the timer which calls the actionperformed method for every second
+		timer.start();// start the task
 
 	}
 
@@ -105,18 +132,19 @@ public class GUI {
 		recordGame.addActionListener((event) -> record.recordGame());
 		JMenuItem loadRecordedGame = new JMenuItem("Load the previous recorded game");
 		loadRecordedGame.addActionListener((event) -> record.loadRecordedGame());
-		
+
 		JMenu replayMenu = new JMenu("Replay");
 		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
 		replayGame.addActionListener((event) -> createRecorderPanel());
-
-		
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
+		level1Item.addActionListener((event) -> ctrl1Action.actionPerformed(event));
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
-		JMenuItem level2Item = new JMenuItem("Load Level 2");
-		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
 		
+		JMenuItem level2Item = new JMenuItem("Load Level 2");
+		level2Item.addActionListener((event) -> ctrl2Action.actionPerformed(event));
+		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
+
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem helpItem = new JMenuItem("See game instructions and controls");
 		helpItem.addActionListener((event) -> design.createHelp());
@@ -125,30 +153,57 @@ public class GUI {
 		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
 		menu.add(fileMenu);
-		
+
 		recordMenu.add(recordGame);
 		recordMenu.add(loadRecordedGame);
 		menu.add(recordMenu);
-		
+
 		replayMenu.add(replayGame);
 		menu.add(replayMenu);
 
 		levelMenu.add(level1Item);
 		levelMenu.add(level2Item);
 		menu.add(levelMenu);
-		
+
 		helpMenu.add(helpItem);
 		menu.add(helpMenu);
 
 		frame.setJMenuBar(menu);
 	}
-	
+
 	private void createRecorderPanel() {
 		record.replayRecordedGame();
+<<<<<<< HEAD
 		recorderPanel=record.replayRecordedGame();
+=======
+
+		recorderPanel.setBackground(bg);
+		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
+		recorderPanel.setPreferredSize(new Dimension(840, 100));
+
+>>>>>>> 67acad95b017e0aa312544b665b153bcd4449c47
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
-		
+
+	}
+
+	/**
+	 * i like to move it move it
+	 * 
+	 * @param dir
+	 */
+	public void move(char dir) {
+		game.move(dir);
+		rend.updateBoard(game);
+		try {
+			design.update();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if (game.isFinished()) {
+			System.exit(0);
+		}
+
 	}
 
 	private void keyBindings() {
@@ -179,20 +234,26 @@ public class GUI {
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
 		designPanel.getActionMap().put("spaceAction", spaceAction);
 		// control s combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
 		designPanel.getActionMap().put("ctrlSAction", ctrlSAction);
 		// control x combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "ctrlXAction");
 		designPanel.getActionMap().put("ctrlXAction", ctrlXAction);
 		// control r combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "ctrlRAction");
 		designPanel.getActionMap().put("ctrlRAction", ctrlRAction);
 		// control 1 combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "ctrl1Action");
 		designPanel.getActionMap().put("ctrl1Action", ctrl1Action);
 		// control 2 combination
-		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK), "ctrl2Action");
 		designPanel.getActionMap().put("ctrl2Action", ctrl2Action);
+
 	}
 
 	// Key Binding Classes
@@ -205,14 +266,9 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('u');
-			record.pastMoves("u");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (!design.isPaused) {
+				record.pastMoves("u");
+				move('u');
 			}
 		}
 	}
@@ -226,14 +282,9 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('d');
-			record.pastMoves("d");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (!design.isPaused) {
+				move('d');
+				record.pastMoves("d");
 			}
 		}
 	}
@@ -247,14 +298,9 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('l');
-			record.pastMoves("l");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (!design.isPaused) {
+				move('l');
+				record.pastMoves("l");
 			}
 		}
 	}
@@ -268,14 +314,9 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.move('r');
-			record.pastMoves("r");
-			rend.updateBoard(game);
-			try {
-				design.update();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (!design.isPaused) {
+				move('r');
+				record.pastMoves("r");
 			}
 		}
 	}
@@ -289,7 +330,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(designPanel, "Paused");
+			design.isPaused = !design.isPaused;
 		}
 	}
 
@@ -344,8 +385,14 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		
-			
+			game.loadLevel(manager.getLevels().get(1));
+			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -358,7 +405,14 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			game.loadLevel(manager.getLevels().get(2));
+			rend.updateBoard(game);
+			try {
+				design.update();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 }

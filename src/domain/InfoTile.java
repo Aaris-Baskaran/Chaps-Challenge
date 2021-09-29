@@ -26,4 +26,8 @@ public class InfoTile extends Tile{
 	public Image getImage() {
 		return getImage("InfoFieldTile.png");
 	}
+
+	public String toString(){
+		return "I";
+	}
 }

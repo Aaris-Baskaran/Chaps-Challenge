@@ -1,31 +1,53 @@
 package persistency;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 public class StateManager {
 	
 	private static File[] files;
 	
+	private final TreeMap<Integer, State> levels;
+	
 	public StateManager() {
 		files = findFiles();
+		levels = createLevels();
 	}
 	
 	private File[] findFiles() {
 		File folder = new File("levels");
-		return folder.listFiles();
+		
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File f, String name)
+            {
+                return name.startsWith("level");
+            }
+		};
+		
+		return folder.listFiles(filter);
 	}
 	
-	public State loadState() {
+	public TreeMap<Integer, State> createLevels() {
+		TreeMap<Integer, State> levelList = new TreeMap<>();
+		
+		for(int i = 1; i <= files.length; ++i) {
+			levelList.put(i, loadState(i));
+		}
+		
+		return levelList;
+	}
+	
+	public State loadState(int lvl) {
 		
 		State state = null;
 		
@@ -35,7 +57,7 @@ public class StateManager {
 			
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			
-			Document doc = db.parse(files[0]);
+			Document doc = db.parse(files[lvl - 1]);
 			
 			Element element = doc.getDocumentElement();
 			
@@ -75,5 +97,9 @@ public class StateManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public TreeMap<Integer, State> getLevels() {
+		return levels;
 	}
 }
