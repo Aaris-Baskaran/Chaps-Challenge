@@ -35,6 +35,7 @@ public class Design {
 	public JLabel keysText = new JLabel();
 	public JLabel treasureText = new JLabel();
 	public JLabel timerText = new JLabel();
+	public JLabel levelText = new JLabel();
 	public Help helpFrame;
 	public boolean isHelpActive = false;
 	public boolean isPaused = false;
@@ -126,7 +127,7 @@ public class Design {
 
 		timerText = new JLabel("Timer: " + game.time + " seconds");
 		labels.add(timerText);
-		JLabel levelText = new JLabel("Level: " + game.getLevel());
+		levelText = new JLabel("Level: " + game.getLevel());
 		labels.add(levelText);
 		keysText = new JLabel();
 		String keys = "Keys Collected: You have no keys collected.";
@@ -178,6 +179,8 @@ public class Design {
 		} else {
 			timerText.setText("Timer: " + game.time + " seconds");
 		}
+		
+		levelText.setText("Level: "+game.getLevel());
 
 	}
 }
