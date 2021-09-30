@@ -87,6 +87,13 @@ public class Game {
      */
     private Position portalPos0;
     private Position portalPos1;
+
+    /**
+     * Positions of the bugs
+     */
+    private Position bugPosH;
+    private Position bugPosV;
+
     /**
      * Constructor for the Game.
      */
@@ -136,6 +143,29 @@ public class Game {
 
         //find portal positions
         setPortalPositions();
+
+        setBugPositions();
+    }
+
+    private void setBugPositions() {
+        if (level == 2){
+            return;
+        }
+
+        int i = 0;
+        for (Tile[] tiles : maze) {
+            for (int j = 0; j < maze.length; j++) {
+                if (tiles[j].isA(BugTile.class)) {
+                    if (((BugTile) tiles[j]).getType() == 'h'){
+                        bugPosH = new Position(i,j);
+                    }
+                    else {
+                        bugPosV = new Position(i,j);
+                    }
+                }
+            }
+            i++;
+        }
     }
 
     private void setPortalPositions() {
@@ -208,8 +238,40 @@ public class Game {
         else if(c == 'p'){
             return new PortalTile(1);
         }
+        else if(c == 'B'){
+            return new BugTile('h');
+        }
+        else if(c == 'b'){
+            return new BugTile('v');
+        }
 
     	return null;
+    }
+
+    /**
+     * Moves the bugs.
+     */
+    public void moveBugs(){
+
+        //move the horizontal bug
+        int x = bugPosH.getX();
+        int y = bugPosH.getY();
+        BugTile bug = (BugTile) maze[x][y];
+
+        Tile next = maze[x-1][y];
+        if (next.isA(WallTile.class)){
+            bug.setDirection();
+        }
+
+        if (bug.getDirection()){    //move bug left
+            maze[x-1][y] = bug;
+            maze[x][y] = new FreeTile();
+        }
+        else {                      //move bug right
+            maze[x+1][y] = bug;
+            maze[x][y] = new FreeTile();
+        }
+
     }
 
 

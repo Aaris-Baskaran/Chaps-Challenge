@@ -10,10 +10,14 @@ import java.awt.*;
  */
 public class BugTile extends Tile{
 
+	private char type;
+	private boolean direction;
+
 	/**
 	 * other moving things can move onto bug tiles.
 	 */
-	public BugTile() {
+	public BugTile(char t) {
+		type = t;
 		canMove = true;
 	}
 
@@ -39,5 +43,20 @@ public class BugTile extends Tile{
 		else {
 			return getImage("BugFacingRightTile.png");
 		}
+	}
+
+	public boolean getDirection() {
+		return direction;
+	}
+
+	public void setDirection(){
+		if (direction){
+			direction = false;
+		}
+		direction = true;
+	}
+
+	public char getType() {
+		return type;
 	}
 }
