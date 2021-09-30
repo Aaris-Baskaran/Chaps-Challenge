@@ -263,7 +263,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
-				record.pastMoves("u");
+				record.pastMoves("up");
 				move('u');
 			}
 		}
@@ -280,7 +280,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('d');
-				record.pastMoves("d");
+				record.pastMoves("down");
 			}
 		}
 	}
@@ -296,7 +296,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('l');
-				record.pastMoves("l");
+				record.pastMoves("left");
 			}
 		}
 	}
@@ -312,7 +312,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('r');
-				record.pastMoves("r");
+				record.pastMoves("right");
 			}
 		}
 	}
