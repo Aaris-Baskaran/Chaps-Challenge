@@ -66,4 +66,10 @@ public class BugTile extends Tile{
 	public char getType() {
 		return type;
 	}
+	
+	@Override
+	public String toString() {
+		if(type == 'h') return "B";
+		return "b";
+	}
 }

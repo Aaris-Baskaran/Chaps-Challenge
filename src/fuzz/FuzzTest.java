@@ -1,87 +1,147 @@
 package fuzz;
 
-import static org.junit.Assert.*;
 
+import app.GUI;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+
+import java.awt.AWTException;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import java.awt.Robot;
 
 
 /**
- * @author Kalem.
+ * @author Kalem edlinkale.
  *
  */
 public class FuzzTest {
 	
-	public String accessToken = "n3CwsL-tmEHwxHKts-yc";
+	private String accessToken = "n3CwsL-tmEHwxHKts-yc";
+
+	private GUI gui; 
+	
+	
+	
+	private int upAction = KeyEvent.VK_UP;
+	private int downAction = KeyEvent.VK_DOWN;
+	private int leftAction = KeyEvent.VK_LEFT;
+	private int rightAction = KeyEvent.VK_RIGHT;
+	private int spaceAction = KeyEvent.VK_SPACE;
+	private int escAction = KeyEvent.VK_ESCAPE;
+	private int control = KeyEvent.VK_CONTROL;
+	private int ctrlSAction = 83; //To be combined with control int
+	private int ctrlXAction = 88; //To be combined with control int
+	private int ctrlRAction = 82; //To be combined with control int
+	private int ctrl1Action = 49; //To be combined with control int
+	private int ctrl2Action = 50; //To be combined with control int
+	
 	
 	
 	@Test
     public void test1() {
-        System.out.println("This is the testcase in this class");
-//        String str1="This is the testcase in this class";
-//        assertEquals("This is the testcase in this class", str1);
-        
-        try {
+		System.out.println("This is the test case 1 in this class for level 1");
+		try {
+			gui = new GUI();
+        	Robot robot = new Robot();
+        	assertTimeoutPreemptively( Duration.ofSeconds(60), () -> {
+        		Thread.sleep(2000);
+        		clickMultipleButtons(new int[]{control, ctrl1Action}, robot);
+        		int count = 0;
+    			while(true) {
+    				Thread.sleep(1000);
+    				System.out.println(count++);
+    			}
+        	});
         	
-        	
-        	
+        }
+        catch(IOException e) {
+        	//GUI not working
+        }
+        catch(AWTException e) {
+        	//Robot not working
         }
         catch(IllegalArgumentException e) {
-        	
+        	//A precondition violation
+//        	raiseIssue("", "");
         }
         catch(IllegalStateException e) {
-        	
+        	//A precondition violation
+//        	raiseIssue("", "");
         }
         catch(NullPointerException e) {
-        	
+        	//general programming error (issue where an object is null and is trying to be utilized)
+//        	raiseIssue("", "");
         }
         catch(AssertionError e) {
-        	
+        	//A postcondition violation determined by the asserts in the module code.
+//        	raiseIssue("", "");
         }
         
         
     }
 	
 	@Test
-    public void test2() {
-        System.out.println("This is the testcase in this class");
-//        String str1="This is the testcase in this class";
-//        assertEquals("This is the testcase in this class", str1);
-        
+    public void test2() { 
+        System.out.println("This is the test case 2 in this class for level 2");
         try {
+        	Robot robot = new Robot();
+        	assertTimeoutPreemptively( Duration.ofSeconds(60), () -> {
+        		clickMultipleButtons(new int[]{control, ctrl2Action}, robot);
+        		int count = 0;
+    			while(true) {
+    				Thread.sleep(1000);
+    				System.out.println(count++);
+    			}
+        	});
         	
-        	
-        	
+        }
+        catch(AWTException e) {
+        	//Robot not working
         }
         catch(IllegalArgumentException e) {
-        	raiseIssue("", "");
+        	//A precondition violation
+//        	raiseIssue("", "");
         }
         catch(IllegalStateException e) {
-        	raiseIssue("", "");
+        	//A precondition violation
+//        	raiseIssue("", "");
         }
         catch(NullPointerException e) {
-        	raiseIssue("", "");
+        	//general programming error (issue where an object is null and is trying to be utilized)
+//        	raiseIssue("", "");
         }
         catch(AssertionError e) {
-        	raiseIssue("", "");
+        	//A postcondition violation determined by the asserts in the module code.
+//        	raiseIssue("", "");
         }
         
         
     }
+	
+	private void clickButton(int keyCode, Robot robot) {
+		robot.keyPress(keyCode);
+		robot.keyRelease(keyCode);
+	}
+	
+	private void clickMultipleButtons(int[] keyCodes, Robot robot) {
+		for(int keyCode : keyCodes) {
+			robot.keyPress(keyCode);
+		}
+		for(int keyCode : keyCodes) {
+			robot.keyRelease(keyCode);
+		}
+	}
 	
 
 	
@@ -90,32 +150,31 @@ public class FuzzTest {
 		try {
 			URL url = new URL("https://gitlab.ecs.vuw.ac.nz/api/v4/projects/11025/issues");
 			HttpURLConnection http = (HttpURLConnection) url.openConnection();
-			http.setDoOutput(true);
+			
 			http.setRequestProperty("Authorization","Bearer "+accessToken);
 			
-			Map<String,String> arguments = new HashMap<>();
-			arguments.put("assignee_id", user);
-			arguments.put("title", title);
-			arguments.put("labels", "#detectedByFuzzer");
 			
-			StringJoiner sj = new StringJoiner("&");
+			String jsonInputString = "{\"assignee_username\": \""+user+"\", \"title\": \""+title+"\", \"labels\": \"#detectedByFuzzer\"}";
 			
-			for(Map.Entry<String,String> entry : arguments.entrySet())
-			    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" 
-			         + URLEncoder.encode(entry.getValue(), "UTF-8"));
-			byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-			
-			System.out.println(sj);
-			
-			
-			int length = out.length;
-			
-			http.setFixedLengthStreamingMode(length);
-			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			http.setRequestMethod("POST");
+			http.setRequestProperty("Content-Type", "application/json; utf-8");
+			http.setRequestProperty("Accept", "application/json");
+			http.setDoOutput(true);
 			http.connect();
 			
 			try(OutputStream os = http.getOutputStream()) {
-			    os.write(out);
+			    byte[] input = jsonInputString.getBytes("utf-8");
+			    os.write(input, 0, input.length);			
+			}
+			
+			try(BufferedReader br = new BufferedReader(
+				new InputStreamReader(http.getInputStream(), "utf-8"))) {
+			    	StringBuilder response = new StringBuilder();
+			    	String responseLine = null;
+			    	while ((responseLine = br.readLine()) != null) {
+			    		response.append(responseLine.trim());
+			    	}
+			    	System.out.println(response.toString());
 			}
 			
 		} 

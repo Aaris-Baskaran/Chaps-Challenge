@@ -17,6 +17,10 @@ public class State {
     */
 	private final String[] maze;
 	/**
+	* the keys Chap has in Game
+	*/
+	private final String keys;
+	/**
     * the chapPos field in Game
     */
 	private final Position chapPos;
@@ -24,6 +28,10 @@ public class State {
     * the chapDirection field in Game
     */
 	private final char chapDirection;
+	/**
+	* the number of chips in treasureChest in Game
+	*/
+	private final int chipsInChest;
 	/**
     * the chips remaining in Game
     */
@@ -38,12 +46,14 @@ public class State {
      * @param keys keys that Chap holds
      * @param chipsRemaining chips left on maze
      */
-	public State(int levelNum, int maxTime, String[] maze, int x, int y, char dir, int chipsRemaining){
+	public State(int levelNum, int maxTime, String[] maze, String keys, int x, int y, char dir, int chipsInChest, int chipsRemaining){
 	   this.levelNum = levelNum;
 	   this.maxTime = maxTime;
 	   this.maze = maze;
+	   this.keys = keys;
 	   this.chapPos = new Position(x, y);
 	   this.chapDirection = dir;
+	   this.chipsInChest = chipsInChest;
 	   this.chipsRemaining = chipsRemaining;
 	}
 	
@@ -63,12 +73,20 @@ public class State {
     	return maze;
     }
     
+    public String getKeys() {
+    	return keys;
+    }
+    
     public Position getPos() {
     	return chapPos;
     }
     
     public char getDir() {
     	return chapDirection;
+    }
+    
+    public int getChipsInChest() {
+    	return chipsInChest;
     }
     
     public int getChipsLeft() {

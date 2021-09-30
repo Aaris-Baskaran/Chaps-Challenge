@@ -41,7 +41,7 @@ public class GUI extends WindowAdapter {
 
 	public Recorder record = new Recorder(this);
 
-	public Game game = new Game(manager.getLevels().get(1));
+	public Game game = new Game(manager.loadGame());
 
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
@@ -119,16 +119,17 @@ public class GUI extends WindowAdapter {
 					}
 					design.isPaused = false;
 				}
+				// turn the clock down if the game isnt paused
+				if (!design.isPaused) {
+					game.time = game.time - 1;
+				}
 				rend.updateBoard(game);
 				try {
 					design.update();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// turn the clock down if the game isnt paused
-				if (!design.isPaused) {
-					game.time = game.time - 1;
-				}
+				
 				if (game.time < 1) {
 					design.isPaused = true;
 					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
@@ -494,6 +495,7 @@ public class GUI extends WindowAdapter {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
 			game.loadLevel(manager.getLevels().get(2));
 			rend.updateBoard(game);
 			try {

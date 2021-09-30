@@ -54,6 +54,14 @@ public class Design {
 		designPanel = createDesignPanel();
 	}
 
+	/**
+	 * 
+	 * Method to create the design panel, First creating and displaying the logo at
+	 * the top, and then calling other methods to build the bottom 2 sections.
+	 * 
+	 * @return design
+	 * @throws IOException
+	 */
 	public JPanel createDesignPanel() throws IOException {
 		JPanel design = new JPanel();
 		design.setBackground(bg);
@@ -76,7 +84,14 @@ public class Design {
 
 		return design;
 	}
-	
+
+	/**
+	 * 
+	 * Method to create the middle section of the design panel, showing time
+	 * remaining, the current level, keys collected and treasure remaining.
+	 * 
+	 * @return info
+	 */
 	public JPanel createInfoPanel() {
 
 		ArrayList<JLabel> labels = new ArrayList<JLabel>();
@@ -109,6 +124,13 @@ public class Design {
 		return info;
 	}
 
+	/**
+	 * 
+	 * Method to create the bottom section of the design panel, showing buttons for
+	 * pause, exit, help menu and save.
+	 * 
+	 * @return buttons
+	 */
 	public JPanel createButtonPanel() {
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(2, 2));
@@ -122,7 +144,7 @@ public class Design {
 		help.setBorder(BorderFactory.createLineBorder(border, 2));
 		JButton save = new JButton("Save");
 		save.setBorder(BorderFactory.createLineBorder(border, 2));
- 
+
 		// surely give us extra marks for lambda please :)
 		pause.addActionListener((event) -> isPaused = !isPaused);
 		pause.addActionListener((event) -> {
@@ -153,7 +175,6 @@ public class Design {
 		helpFrame = new Help();
 	}
 
-
 	public void update() throws IOException {
 		if (!game.getKeys().isEmpty()) {
 			String keys = "";
@@ -167,8 +188,7 @@ public class Design {
 
 			String displayKeys = "Keys Collected: " + keys;
 			keysText.setText("<html><p style=\"width:100px\">" + displayKeys + "</p></html>");
-		}
-		else {
+		} else {
 			String key = "Keys Collected: You have no keys collected.";
 			keysText.setText("<html><p style=\"width:100px\">" + key + "</p></html>");
 		}
@@ -184,8 +204,8 @@ public class Design {
 		} else {
 			timerText.setText("Timer: " + game.time + " seconds");
 		}
-		
-		levelText.setText("Level: "+game.getLevel());
+
+		levelText.setText("Level: " + game.getLevel());
 
 	}
 }
