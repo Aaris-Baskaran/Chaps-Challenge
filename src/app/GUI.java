@@ -353,6 +353,8 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			manager.delete();
+			manager.saveLevel(game);
 			System.exit(0);
 		}
 	}
@@ -366,9 +368,7 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			frame.remove(recorderPanel);
-			frame.pack();
-			System.out.println(record.moves);
+			game.loadLevel(manager.loadSelect());
 		}
 	}
 
