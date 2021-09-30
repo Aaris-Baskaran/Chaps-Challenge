@@ -101,7 +101,7 @@ public class GUI extends WindowAdapter {
 
 			public void actionPerformed(ActionEvent ae) {
 				game.moveBugs();
-				rend.update(game);
+				rend.updateBoard(game);
 				try {
 					design.update();
 				} catch (IOException e) {
@@ -321,7 +321,7 @@ public class GUI extends WindowAdapter {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
-				record.pastMoves("u");
+				record.pastMoves("up");
 				move('u');
 			}
 		}
@@ -338,7 +338,7 @@ public class GUI extends WindowAdapter {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('d');
-				record.pastMoves("d");
+				record.pastMoves("down");
 			}
 		}
 	}
@@ -354,7 +354,7 @@ public class GUI extends WindowAdapter {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('l');
-				record.pastMoves("l");
+				record.pastMoves("left");
 			}
 		}
 	}
@@ -370,7 +370,7 @@ public class GUI extends WindowAdapter {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('r');
-				record.pastMoves("r");
+				record.pastMoves("right");
 			}
 		}
 	}
