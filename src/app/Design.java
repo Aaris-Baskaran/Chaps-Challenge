@@ -76,51 +76,7 @@ public class Design {
 
 		return design;
 	}
-
-	public JPanel createButtonPanel() {
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new GridLayout(2, 2));
-		buttons.setBackground(bg);
-
-		JButton pause = new JButton("Pause (Spacebar)");
-		pause.setBorder(BorderFactory.createLineBorder(border, 2));
-		JButton end = new JButton("Exit (Ctrl+X)");
-		end.setBorder(BorderFactory.createLineBorder(border, 2));
-		JButton help = new JButton("Help!");
-		help.setBorder(BorderFactory.createLineBorder(border, 2));
-		JButton save = new JButton("Save");
-		save.setBorder(BorderFactory.createLineBorder(border, 2));
-
-		// surely give us extra marks for lambda please :)
-		pause.addActionListener((event) -> isPaused = !isPaused);
-		pause.addActionListener((event) -> {
-			try {
-				update();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		end.addActionListener((event) -> System.exit(0));
-		save.addActionListener((event) -> manager.SaveXML(game));
-		help.addActionListener((event) -> createHelp());
-
-		buttons.add(pause);
-		buttons.add(end);
-		buttons.add(help);
-		buttons.add(save);
-
-		return buttons;
-	}
-
-	public void createHelp() {
-		if (isHelpActive) {
-			// Dispose so you can't open multiple help frames
-			helpFrame.frame.dispose();
-		}
-		isHelpActive = true;
-		helpFrame = new Help();
-	}
-
+	
 	public JPanel createInfoPanel() {
 
 		ArrayList<JLabel> labels = new ArrayList<JLabel>();
@@ -153,6 +109,51 @@ public class Design {
 		return info;
 	}
 
+	public JPanel createButtonPanel() {
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(2, 2));
+		buttons.setBackground(bg);
+
+		JButton pause = new JButton("Pause (Spacebar)");
+		pause.setBorder(BorderFactory.createLineBorder(border, 2));
+		JButton end = new JButton("Exit (Ctrl+X)");
+		end.setBorder(BorderFactory.createLineBorder(border, 2));
+		JButton help = new JButton("Help!");
+		help.setBorder(BorderFactory.createLineBorder(border, 2));
+		JButton save = new JButton("Save");
+		save.setBorder(BorderFactory.createLineBorder(border, 2));
+ 
+		// surely give us extra marks for lambda please :)
+		pause.addActionListener((event) -> isPaused = !isPaused);
+		pause.addActionListener((event) -> {
+			try {
+				update();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		end.addActionListener((event) -> System.exit(0));
+		save.addActionListener((event) -> manager.SaveXML(game));
+		help.addActionListener((event) -> createHelp());
+
+		buttons.add(pause);
+		buttons.add(end);
+		buttons.add(help);
+		buttons.add(save);
+
+		return buttons;
+	}
+
+	public void createHelp() {
+		if (isHelpActive) {
+			// Dispose so you can't open multiple help frames
+			helpFrame.frame.dispose();
+		}
+		isHelpActive = true;
+		helpFrame = new Help();
+	}
+
+
 	public void update() throws IOException {
 		if (!game.getKeys().isEmpty()) {
 			String keys = "";
@@ -167,6 +168,10 @@ public class Design {
 			String displayKeys = "Keys Collected: " + keys;
 			keysText.setText("<html><p style=\"width:100px\">" + displayKeys + "</p></html>");
 		}
+		else {
+			String key = "Keys Collected: You have no keys collected.";
+			keysText.setText("<html><p style=\"width:100px\">" + key + "</p></html>");
+		}
 		String treasure = "Treasure Remaining: " + game.getChipsRemaining();
 		if (game.getChipsRemaining() == 0) {
 			treasure = "You have collected all of the chips. Door is open!";
@@ -174,7 +179,7 @@ public class Design {
 		treasureText.setText("<html><p style=\"width:100px\">" + treasure + "</p></html>");
 
 		if (isPaused) {
-			String time = "Timer: " + game.time + " seconds THE GAME IS CURRENTLY PAUSED";
+			String time = "Timer: " + game.time + " seconds THE GAME IS CURRENTLY PAUSED (ESC key to resume)";
 			timerText.setText("<html><p style=\"width:100px\">" + time + "</p></html>");
 		} else {
 			timerText.setText("Timer: " + game.time + " seconds");
