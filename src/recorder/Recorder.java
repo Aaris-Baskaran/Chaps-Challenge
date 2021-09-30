@@ -2,8 +2,6 @@ package recorder;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -12,9 +10,7 @@ import java.util.concurrent.TimeUnit;
 //import javax.lang.model.element.Element;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 //import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,22 +64,9 @@ public class Recorder {
 	private int moveCount = 0;
 	
 	private long sleepTime = 1000;
-	private Timer timer; 
-	private boolean b= false;
 	
 	public Recorder(GUI g) {
 		gui = g;
-		ActionListener timerAction = new ActionListener() {
-
-			public void actionPerformed(ActionEvent ae) {
-				if(b) {
-				setSpeed();
-				}
-			}
-		};
-		timer = new Timer((int)sleepTime, timerAction);// create the timer which calls the actionperformed method for every second
-		timer.start();// start the task
-
 	}
 	/*
 	 * Method that gets called by the GUI to add a step to the list.
@@ -181,7 +164,6 @@ public class Recorder {
 	}
 	
 	private void autoReplay() {
-		b=true;
 		System.out.println("auto");
 		for(String s :moves) {
 			if(s.equals("up")) {
@@ -200,12 +182,11 @@ public class Recorder {
 				gui.move('r');
 				System.out.println(s);
 			}
-			b=false;
-//			try {
-//				TimeUnit.MILLISECONDS.sleep(sleepTime);
-//			} catch (InterruptedException e1) {
-//				e1.printStackTrace();
-//			}
+			try {
+				TimeUnit.MILLISECONDS.sleep(sleepTime);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	
