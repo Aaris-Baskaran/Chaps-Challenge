@@ -83,7 +83,7 @@ public class Recorder {
 		// Change Arraylist of moves into XML file
 		System.out.print(totalMoves);
 		writeXmlFile(moves);
-		moves.clear();
+		//moves.clear();
 	}
 	
 	public void writeXmlFile(ArrayList<String> list) {
@@ -142,36 +142,48 @@ public class Recorder {
 	}
 	
 	private void moveStepByStep() {
+		System.out.println("step");
+		System.out.println( moves.size());
 		if(moveCount < moves.size()) {
-			if(moves.get(moveCount)=="up") {
+			System.out.println( moveCount);
+			if(moves.get(moveCount).equals("up")) {
 				gui.move('u');
+				System.out.println('u');
 			}
-			if(moves.get(moveCount)=="down") {
+			if(moves.get(moveCount).equals("down")) {
 				gui.move('d');
+				System.out.println('d');
 			}
-			if(moves.get(moveCount)=="left") {
+			if(moves.get(moveCount).equals("left")) {
 				gui.move('l');
+				System.out.println('l');
 			}
-			if(moves.get(moveCount)=="right") {
+			if(moves.get(moveCount).equals("right")) {
 				gui.move('r');
+				System.out.println('r');
 			}
-			moveCount++;
 		}
+		moveCount++;
 	}
 	
 	private void autoReplay() {
+		System.out.println("auto");
 		for(String s :moves) {
-			if(s=="up") {
+			if(s.equals("up")) {
 				gui.move('u');
+				System.out.println(s);
 			}
-			if(s=="down") {
+			if(s.equals("down")) {
 				gui.move('d');
+				System.out.println(s);
 			}
-			if(s=="left") {
+			if(s.equals("left")) {
 				gui.move('l');
+				System.out.println(s);
 			}
-			if(s=="right") {
+			if(s.equals("right")) {
 				gui.move('r');
+				System.out.println(s);
 			}
 			try {
 				TimeUnit.SECONDS.sleep(sleepTime);
