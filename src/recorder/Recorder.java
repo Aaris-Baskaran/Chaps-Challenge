@@ -69,13 +69,16 @@ public class Recorder {
 	
 	private long sleepTime = 1000;
 	private Timer timer; 
+	private boolean b= false;
 	
 	public Recorder(GUI g) {
 		gui = g;
 		ActionListener timerAction = new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
-				autoReplay();
+				if(b) {
+				setSpeed();
+				}
 			}
 		};
 		timer = new Timer((int)sleepTime, timerAction);// create the timer which calls the actionperformed method for every second
@@ -178,6 +181,7 @@ public class Recorder {
 	}
 	
 	private void autoReplay() {
+		b=true;
 		System.out.println("auto");
 		for(String s :moves) {
 			if(s.equals("up")) {
@@ -196,11 +200,12 @@ public class Recorder {
 				gui.move('r');
 				System.out.println(s);
 			}
-			try {
-				TimeUnit.MILLISECONDS.sleep(sleepTime);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			b=false;
+//			try {
+//				TimeUnit.MILLISECONDS.sleep(sleepTime);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
 		}
 	}
 	

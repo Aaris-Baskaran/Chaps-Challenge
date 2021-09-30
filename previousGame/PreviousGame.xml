@@ -1,10 +1,15 @@
 <?xml version = "1.0"?>
 <Moves>
+<Direction>right</Direction>
 <Direction>up</Direction>
+<Direction>up</Direction>
+<Direction>up</Direction>
+<Direction>up</Direction>
+<Direction>up</Direction>
+<Direction>down</Direction>
+<Direction>down</Direction>
+<Direction>down</Direction>
+<Direction>down</Direction>
+<Direction>down</Direction>
 <Direction>left</Direction>
-<Direction>down</Direction>
-<Direction>right</Direction>
-<Direction>right</Direction>
-<Direction>right</Direction>
-<Direction>down</Direction>
 </Moves>
