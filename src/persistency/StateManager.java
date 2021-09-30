@@ -217,6 +217,8 @@ public class StateManager {
 		
 		File init = new File("levels/init.xml");
 		
+		if(!init.isFile()) return lvl;
+		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		
 		try {
