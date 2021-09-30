@@ -105,7 +105,7 @@ public class GUI extends WindowAdapter {
 				}
 				if(game.isDead()) {
 					design.isPaused = true;
-					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
+					JOptionPane.showMessageDialog(designPanel, "You got hit by a bug, level will restart");
 					if (game.getLevel() == 1) {
 						game.loadLevel(manager.getLevels().get(1));
 					} else {
@@ -218,6 +218,11 @@ public class GUI extends WindowAdapter {
 	private void createRecorderPanel() {
 
 		recorderPanel = record.replayRecordedGame();
+		if (game.getLevel() == 1) {
+			game.loadLevel(manager.getLevels().get(1));
+		} else {
+			game.loadLevel(manager.getLevels().get(2));
+		}
 		recorderPanel.setBackground(bg);
 		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
 		recorderPanel.setPreferredSize(new Dimension(840, 100));
