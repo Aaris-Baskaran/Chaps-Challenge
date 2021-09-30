@@ -44,7 +44,8 @@ import persistency.StateManager;
 
 /**
  * @author Maurice.
- *
+ * The recorder class that records the the previous game 
+ * and saves it in an XML file.
  */
 public class Recorder {
 	/*
@@ -65,6 +66,12 @@ public class Recorder {
 	
 	private long sleepTime = 1000;
 	
+	boolean b = false;
+	
+	/*
+	 * The constructor that that creates a recorder object.
+	 * It takes a GUI as a parameter because to replay the game on the board the GUI in needed
+	 */
 	public Recorder(GUI g) {
 		gui = g;
 	}
@@ -86,7 +93,7 @@ public class Recorder {
 		//moves.clear();
 	}
 	
-	public void writeXmlFile(ArrayList<String> list) {
+	private void writeXmlFile(ArrayList<String> list) {
 		try {
 			File saved = new File("previousGame/PreviousGame.xml");
 			saved.createNewFile();
@@ -108,16 +115,21 @@ public class Recorder {
 	}
 	
 	/*
-	 * Load the previous game. 
+	 * Load the previous game that was recorded. 
 	 */
 	public void loadRecordedGame() {
 		// Pass the recorded game to GUI.
-		StateManager m = new StateManager();
-		//m.loadState();
+		if(gui.game.getLevel()==1) {
+			gui.game.loadLevel(gui.manager.getLevels().get(1));
+		}else if(gui.game.getLevel()==2) {
+			gui.game.loadLevel(gui.manager.getLevels().get(2));
+		}
+		
 	}
 	
 	/*
 	 * Replay the previous game.
+	 * Creates a panel with buttons and then adds it to the bottom of the board
 	 */
 	public JPanel replayRecordedGame() {
 		Color bg = new Color(72, 204, 180);
@@ -182,11 +194,13 @@ public class Recorder {
 				gui.move('r');
 				System.out.println(s);
 			}
+			//setSpeed();
 			try {
 				TimeUnit.MILLISECONDS.sleep(sleepTime);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
+			b=false;
 		}
 	}
 	
@@ -210,14 +224,17 @@ public class Recorder {
 			return 1;
 		}
 		System.out.println(sleepTime);
+		
 		return 1;
 	}
-
+	/*
+	 * For other classes to get the total moves made on a level. 
+ 	*/
 	public static int getTotalMoves() {
 		return totalMoves;
 	}
 	
-	public static void setTotalMoves(int totalMoves) {
+	private static void setTotalMoves(int totalMoves) {
 		Recorder.totalMoves = totalMoves;
 	}
 }
