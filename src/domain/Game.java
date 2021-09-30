@@ -695,7 +695,8 @@ public class Game {
      */
     public String getInfo() {
         if (level == 0){
-            return "Level 1 info";
+            return "Take the RIGHT path for the Yellow Key\n" +
+                    "Take the wrong path to get the chips";
         }
         return "Level 2 info";
     }
