@@ -6,19 +6,24 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import domain.Game;
 import persistency.StateManager;
@@ -31,10 +36,10 @@ import renderer.Renderer;
  * @author Stelio Brooky
  *
  */
-public class GUI {
+public class GUI extends WindowAdapter {
 	public StateManager manager = new StateManager();
 
-	public Recorder record = new Recorder(this);	
+	public Recorder record = new Recorder(this);
 
 	public Game game = new Game(manager.getLevels().get(1));
 
@@ -58,6 +63,7 @@ public class GUI {
 	Action leftAction;
 	Action rightAction;
 	Action spaceAction;
+	Action escAction;
 	Action ctrlSAction;
 	Action ctrlXAction;
 	Action ctrlRAction;
@@ -89,10 +95,31 @@ public class GUI {
 		frame.add(designPanel, BorderLayout.EAST);
 		frame.pack();
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		ActionListener timerAction = new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
+				if (game.getLevel() == 2) {
+					game.moveBugs();
+				}
+				if(game.isDead()) {
+					design.isPaused = true;
+					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
+					if (game.getLevel() == 1) {
+						game.loadLevel(manager.getLevels().get(1));
+					} else {
+						game.loadLevel(manager.getLevels().get(2));
+					}
+					rend.updateBoard(game);
+					try {
+						design.update();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					design.isPaused = false;
+				}
+				rend.updateBoard(game);
 				try {
 					design.update();
 				} catch (IOException e) {
@@ -103,13 +130,32 @@ public class GUI {
 					game.time = game.time - 1;
 				}
 				if (game.time < 1) {
-					timer.stop();// stop the timer after the time is out
-					System.exit(0);
+					design.isPaused = true;
+					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
+					if (game.getLevel() == 1) {
+						game.loadLevel(manager.getLevels().get(1));
+					} else {
+						game.loadLevel(manager.getLevels().get(2));
+					}
+					rend.updateBoard(game);
+					try {
+						design.update();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					design.isPaused = false;
 				}
 			}
 		};
 		timer = new Timer(1000, timerAction);// create the timer which calls the actionperformed method for every second
 		timer.start();// start the task
+
+		// stop the space bar from selecting highlighted buttons
+		InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
+		im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+		im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+
+		frame.addWindowListener(this);
 
 	}
 
@@ -138,7 +184,7 @@ public class GUI {
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
 		level1Item.addActionListener((event) -> ctrl1Action.actionPerformed(event));
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
-		
+
 		JMenuItem level2Item = new JMenuItem("Load Level 2");
 		level2Item.addActionListener((event) -> ctrl2Action.actionPerformed(event));
 		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
@@ -171,13 +217,11 @@ public class GUI {
 
 	private void createRecorderPanel() {
 
-		
-
-		recorderPanel=record.replayRecordedGame();
+		recorderPanel = record.replayRecordedGame();
 		recorderPanel.setBackground(bg);
 		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
 		recorderPanel.setPreferredSize(new Dimension(840, 100));
-		
+
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
 
@@ -197,9 +241,36 @@ public class GUI {
 			e1.printStackTrace();
 		}
 		if (game.isFinished()) {
-			System.exit(0);
+			if (game.getLevel() == 1) {
+				game.loadLevel(manager.getLevels().get(2));
+				rend.updateBoard(game);
+				try {
+					design.update();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			} else {
+				design.isPaused = true;
+				JOptionPane.showMessageDialog(designPanel,
+						"Congratulations on beating Chip vs Chap, if you wish to continue, the game will now restart at level 1, otherwise, thank you for playing!");
+				game.loadLevel(manager.getLevels().get(1));
+				rend.updateBoard(game);
+				try {
+					design.update();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				design.isPaused = false;
+			}
 		}
 
+	}
+
+	public void windowClosing(WindowEvent e) {
+		int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you would like to exit?");
+		if (confirm == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
 	}
 
 	private void keyBindings() {
@@ -208,6 +279,7 @@ public class GUI {
 		leftAction = new LeftAction();
 		rightAction = new RightAction();
 		spaceAction = new SpaceAction();
+		escAction = new EscAction();
 		ctrlSAction = new CtrlSAction();
 		ctrlXAction = new CtrlXAction();
 		ctrlRAction = new CtrlRAction();
@@ -229,6 +301,10 @@ public class GUI {
 		// space bar
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "spaceAction");
 		designPanel.getActionMap().put("spaceAction", spaceAction);
+		// escape key
+		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+				.put(KeyStroke.getKeyStroke((char) KeyEvent.VK_ESCAPE), "escAction");
+		designPanel.getActionMap().put("escAction", escAction);
 		// control s combination
 		designPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
 				.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "ctrlSAction");
@@ -263,7 +339,7 @@ public class GUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
-				record.pastMoves("u");
+				record.pastMoves("up");
 				move('u');
 			}
 		}
@@ -280,7 +356,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('d');
-				record.pastMoves("d");
+				record.pastMoves("down");
 			}
 		}
 	}
@@ -296,7 +372,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('l');
-				record.pastMoves("l");
+				record.pastMoves("left");
 			}
 		}
 	}
@@ -312,7 +388,7 @@ public class GUI {
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
 				move('r');
-				record.pastMoves("r");
+				record.pastMoves("right");
 			}
 		}
 	}
@@ -326,7 +402,20 @@ public class GUI {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			design.isPaused = !design.isPaused;
+			design.isPaused = true;
+		}
+	}
+
+	public class EscAction extends AbstractAction {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			design.isPaused = false;
 		}
 	}
 
@@ -386,7 +475,6 @@ public class GUI {
 			try {
 				design.update();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -406,7 +494,6 @@ public class GUI {
 			try {
 				design.update();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

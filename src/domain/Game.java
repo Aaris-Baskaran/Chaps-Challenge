@@ -87,6 +87,18 @@ public class Game {
      */
     private Position portalPos0;
     private Position portalPos1;
+
+    /**
+     * Positions of the bugs
+     */
+    private Position bugPosH;
+    private Position bugPosV;
+
+    /**
+     * Flag to indicate if chap is eaten by a bug.
+     */
+    private boolean isDead;
+
     /**
      * Constructor for the Game.
      */
@@ -131,11 +143,39 @@ public class Game {
         treasureChest.clear();
         keys.clear();
 
-        //reset var
+        //reset vars
         finished = false;
+        isDead = false;
 
         //find portal positions
         setPortalPositions();
+
+        //find bug positions
+        setBugPositions();
+
+    }
+
+    private void setBugPositions() {
+        if (level == 1){
+            return;
+        }
+
+        int i = 0;
+        for (Tile[] tiles : maze) {
+            for (int j = 0; j < maze.length; j++) {
+                if (tiles[j].isA(BugTile.class)) {
+                    //System.out.println("yeet");
+                    if (((BugTile) tiles[j]).getType() == 'h'){
+                        //System.out.println("yeet");
+                        bugPosH = new Position(i,j);
+                    }
+                    else {
+                        bugPosV = new Position(i,j);
+                    }
+                }
+            }
+            i++;
+        }
     }
 
     private void setPortalPositions() {
@@ -208,10 +248,88 @@ public class Game {
         else if(c == 'p'){
             return new PortalTile(1);
         }
+        else if(c == 'B'){
+            return new BugTile('h');
+        }
+        else if(c == 'b'){
+            return new BugTile('v');
+        }
 
     	return null;
     }
 
+    /**
+     * Moves the bugs.
+     */
+    public void moveBugs(){
+
+
+        //move the horizontal bug
+        int x = bugPosH.getX();
+        int y = bugPosH.getY();
+        BugTile bug = (BugTile) maze[x][y];
+
+        Tile next;
+        if (bug.getDirection()) {
+            next = maze[x - 1][y];
+        }
+        else{
+            next = maze[x + 1][y];
+        }
+
+        if (next.isA(WallTile.class)){
+            bug.toggleDirection();
+        }
+        else if (next.isA(ChapTile.class)){
+            bug.toggleDirection();
+            playSound('B');
+            isDead = true;
+        }
+
+        if (bug.getDirection()){    //move bug left
+            maze[x-1][y] = bug;
+            maze[x][y] = new FreeTile();
+            bugPosH = new Position(x-1,y);
+        }
+        else {                      //move bug right
+            maze[x+1][y] = bug;
+            maze[x][y] = new FreeTile();
+            bugPosH = new Position(x+1,y);
+        }
+
+        //move the vertical bug
+        x = bugPosV.getX();
+        y = bugPosV.getY();
+        bug = (BugTile) maze[x][y];
+
+        if (bug.getDirection()) {
+            next = maze[x][y-1];
+        }
+        else{
+            next = maze[x][y+1];
+        }
+
+        if (next.isA(WallTile.class)){
+            bug.toggleDirection();
+        }
+        else if (next.isA(ChapTile.class)){
+            bug.toggleDirection();
+            playSound('B');
+            isDead = true;
+        }
+
+        if (bug.getDirection()){    //move bug left
+            maze[x][y-1] = bug;
+            maze[x][y] = new FreeTile();
+            bugPosV = new Position(x,y-1);
+        }
+        else {                      //move bug right
+            maze[x][y+1] = bug;
+            maze[x][y] = new FreeTile();
+            bugPosV = new Position(x,y+1);
+        }
+
+    }
 
     /**
      * Get the current position of chap on the maze.
@@ -256,12 +374,42 @@ public class Game {
         else if (tile == 'T'){
             s = new SoundEffect("TreasureCollected.wav");
         }
+        else if (tile == 'B'){
+            s = new SoundEffect(getRandomDeadSound());
+        }
         else {//(tile == 'L' || tile == 'l') {
             s = new SoundEffect("UnlockDoor.wav");
         }
 
         s.playSound();
 
+    }
+
+    private String getRandomDeadSound() {
+        int i = (int) (Math.random()*7.0);
+
+        if (i == 0){
+            return "confusion.wav";
+        }
+        else if (i == 1){
+            return "ohmadays.wav";
+        }
+        else if (i == 2){
+            return "oof1.wav";
+        }
+        else if (i == 3){
+            return "oof2.wav";
+        }
+        else if (i == 4){
+            return "oof3.wav";
+        }
+        else if (i == 5){
+            return "weenak1.wav";
+        }
+        else if (i == 6){
+            return "weenak2.wav";
+        }
+        return "oof3.wav";
     }
 
     //Moves chap in the specified direction
@@ -402,6 +550,11 @@ public class Game {
             playSound('L');
             return true;
         }
+        else if (nextTile.isA(BugTile.class)){
+            playSound('B');
+            isDead = true;
+            return false;
+        }
 
         //PRECONDITION CHECKS
         throwIllegalArgumentException(nextTile);
@@ -515,6 +668,15 @@ public class Game {
      */
     public boolean isFinished(){
         return finished;
+    }
+
+    /**
+     * Used to check if the player has been eaten by a bug.
+     *
+     * @return finished
+     */
+    public boolean isDead(){
+        return isDead;
     }
 
     /**

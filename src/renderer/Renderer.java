@@ -23,8 +23,8 @@ public class Renderer {
 	 * Renderer constructor
 	 */
 	public Renderer(Game game) {
-		for (int i = 0; i < 25; i++) {
-			for (int j = 0; j < 25; j++) {
+		for (int i = 0; i < 35; i++) {
+			for (int j = 0; j < 35; j++) {
 				Tile[][] maze = game.getMaze();
 				Tile tile = maze[j][i];
 				this.tileList.add(tile.getImage());
@@ -51,20 +51,14 @@ public class Renderer {
 				int lastIndexX = chapPosition.getX() + 5;
 				int lastIndexY = chapPosition.getY() + 5;
 				
-				/*System.out.println(firstIndexX);
-				System.out.println(firstIndexY);
-				System.out.println(lastIndexX);
-				System.out.println(lastIndexY);*/
-				
 				int iPos = 0;
 				
 				for (int i = firstIndexY; i < lastIndexY; i++) {
 					int jPos = 0;
 					for (int j = firstIndexX; j < lastIndexX; j++) {
 						if (tileList.size() > 0) {
-							Object tile = tileList.get(i*25 + j);
+							Object tile = tileList.get(i*35 + j);
 							g.drawImage((Image) tile, jPos*60, iPos*60, 60, 60, this);
-							//System.out.println(iPos + " " + jPos + "\n");
 							jPos++;
 						}
 					}
@@ -97,8 +91,8 @@ public class Renderer {
 	public ArrayList<Object> update(Game game) {
 		ArrayList<Object> updatedList = new ArrayList<Object>();
 		
-		for (int i = 0; i < 25; i++) {
-			for (int j = 0; j < 25; j++) {
+		for (int i = 0; i < 35; i++) {
+			for (int j = 0; j < 35; j++) {
 				Tile[][] maze = game.getMaze();
 				Tile tile = maze[j][i];
 				updatedList.add(tile.getImage());
