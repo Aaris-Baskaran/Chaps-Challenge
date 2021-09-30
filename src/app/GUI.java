@@ -112,7 +112,7 @@ public class GUI extends WindowAdapter {
 					game.time = game.time - 1;
 				}
 				if (game.time < 1) {
-					design.isPaused = true;
+					design.isPaused = true; 
 					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
 					if (game.getLevel() == 1) {
 						game.loadLevel(manager.getLevels().get(1));
