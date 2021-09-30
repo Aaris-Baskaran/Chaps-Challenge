@@ -41,7 +41,7 @@ public class GUI extends WindowAdapter {
 
 	public Recorder record = new Recorder(this);
 
-	public Game game = new Game(manager.getLevels().get(1));
+	public Game game = new Game(manager.loadGame());
 
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);

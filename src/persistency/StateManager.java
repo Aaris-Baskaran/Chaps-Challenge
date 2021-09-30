@@ -86,10 +86,12 @@ public class StateManager {
 				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
 			}
 			
+			String keys = element.getElementsByTagName("Keys").item(0).getTextContent();
 			String x = element.getElementsByTagName("X").item(0).getTextContent();
 			String y = element.getElementsByTagName("Y").item(0).getTextContent();
 			String dir = element.getElementsByTagName("Dir").item(0).getTextContent();
-			String chips = element.getElementsByTagName("Chips").item(0).getTextContent();
+			String treasure = element.getElementsByTagName("Chips").item(0).getTextContent();
+			String chips = element.getElementsByTagName("Chips").item(1).getTextContent();
 			
 			char direction = dir.charAt(0);
 			
@@ -97,9 +99,10 @@ public class StateManager {
 			int timeLeft = Integer.parseInt(time);
 			int xPos = Integer.parseInt(x);
 			int yPos = Integer.parseInt(y);
+			int chipsInChest = Integer.parseInt(treasure);
 			int chipsLeft = Integer.parseInt(chips);
 			
-			state = new State(levelNum, timeLeft, maze, xPos, yPos, direction, chipsLeft);
+			state = new State(levelNum, timeLeft, maze, keys, xPos, yPos, direction, chipsInChest, chipsLeft);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
@@ -129,10 +132,12 @@ public class StateManager {
 				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
 			}
 			
+			String keys = element.getElementsByTagName("Keys").item(0).getTextContent();
 			String x = element.getElementsByTagName("X").item(0).getTextContent();
 			String y = element.getElementsByTagName("Y").item(0).getTextContent();
 			String dir = element.getElementsByTagName("Dir").item(0).getTextContent();
-			String chips = element.getElementsByTagName("Chips").item(0).getTextContent();
+			String treasure = element.getElementsByTagName("Chips").item(0).getTextContent();
+			String chips = element.getElementsByTagName("Chips").item(1).getTextContent();
 			
 			char direction = dir.charAt(0);
 			
@@ -140,9 +145,10 @@ public class StateManager {
 			int timeLeft = Integer.parseInt(time);
 			int xPos = Integer.parseInt(x);
 			int yPos = Integer.parseInt(y);
+			int chipsInChest = Integer.parseInt(treasure);
 			int chipsLeft = Integer.parseInt(chips);
 			
-			state = new State(levelNum, timeLeft, maze, xPos, yPos, direction, chipsLeft);
+			state = new State(levelNum, timeLeft, maze, keys, xPos, yPos, direction, chipsInChest, chipsLeft);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
@@ -183,9 +189,11 @@ public class StateManager {
 				writer.write("</Row>\n");
 			}
 			
+			writer.write("	<Keys>" + game.getInventory() + "</Keys>\n");
 			writer.write("	<X>" + game.getChapPos().getX() + "</X>\n");
 			writer.write("	<Y>" + game.getChapPos().getY() + "</Y>\n");
 			writer.write("	<Dir>" + Game.getChapDirection() + "</Dir>\n");
+			writer.write("	<Chips>" + game.getTreasureChestSize() + "</Chips>\n");
 			writer.write("	<Chips>" + game.getChipsRemaining() + "</Chips>\n");
 			
 			writer.write("</Game>\n");
