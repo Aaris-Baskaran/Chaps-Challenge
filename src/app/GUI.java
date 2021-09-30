@@ -39,7 +39,7 @@ import renderer.Renderer;
 public class GUI extends WindowAdapter {
 	public StateManager manager = new StateManager();
 
-	public Recorder record = new Recorder(this);	
+	public Recorder record = new Recorder(this);
 
 	public Game game = new Game(manager.getLevels().get(1));
 
@@ -100,7 +100,25 @@ public class GUI extends WindowAdapter {
 		ActionListener timerAction = new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
-				game.moveBugs();
+				if (game.getLevel() == 2) {
+					game.moveBugs();
+				}
+				if(game.isDead()) {
+					design.isPaused = true;
+					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
+					if (game.getLevel() == 1) {
+						game.loadLevel(manager.getLevels().get(1));
+					} else {
+						game.loadLevel(manager.getLevels().get(2));
+					}
+					rend.updateBoard(game);
+					try {
+						design.update();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					design.isPaused = false;
+				}
 				rend.updateBoard(game);
 				try {
 					design.update();
@@ -112,7 +130,7 @@ public class GUI extends WindowAdapter {
 					game.time = game.time - 1;
 				}
 				if (game.time < 1) {
-					design.isPaused = true; 
+					design.isPaused = true;
 					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
 					if (game.getLevel() == 1) {
 						game.loadLevel(manager.getLevels().get(1));
@@ -136,7 +154,7 @@ public class GUI extends WindowAdapter {
 		InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
 		im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
 		im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
-		
+
 		frame.addWindowListener(this);
 
 	}
@@ -199,13 +217,11 @@ public class GUI extends WindowAdapter {
 
 	private void createRecorderPanel() {
 
-		
-
-		recorderPanel=record.replayRecordedGame();
+		recorderPanel = record.replayRecordedGame();
 		recorderPanel.setBackground(bg);
 		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
 		recorderPanel.setPreferredSize(new Dimension(840, 100));
-		
+
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
 
@@ -235,7 +251,8 @@ public class GUI extends WindowAdapter {
 				}
 			} else {
 				design.isPaused = true;
-				JOptionPane.showMessageDialog(designPanel, "Congratulations on beating Chip vs Chap, if you wish to continue, the game will now restart at level 1, otherwise, thank you for playing!");
+				JOptionPane.showMessageDialog(designPanel,
+						"Congratulations on beating Chip vs Chap, if you wish to continue, the game will now restart at level 1, otherwise, thank you for playing!");
 				game.loadLevel(manager.getLevels().get(1));
 				rend.updateBoard(game);
 				try {
@@ -248,9 +265,10 @@ public class GUI extends WindowAdapter {
 		}
 
 	}
+
 	public void windowClosing(WindowEvent e) {
 		int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you would like to exit?");
-		if(confirm == JOptionPane.YES_OPTION) {
+		if (confirm == JOptionPane.YES_OPTION) {
 			System.exit(0);
 		}
 	}
