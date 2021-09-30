@@ -702,6 +702,30 @@ public class Game {
     }
 
     /**
+     * Get the number of treasures collected.
+     *
+     * @return size
+     */
+    public int getTreasureChestSize(){
+        return treasureChest.size();
+    }
+
+    public String getInventory(){
+        String ret = "";
+
+        for (KeyTile k: keys){
+            if (k.getColor() == Color.BLUE){
+                ret += "k";
+            }
+            else{
+                ret += "K";
+            }
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns the current maze as a formatted String.
      *
      * @return ret
