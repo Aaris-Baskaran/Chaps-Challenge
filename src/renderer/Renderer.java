@@ -20,7 +20,7 @@ public class Renderer {
 	private Game game;
 	
 	/**
-	 * Renderer constructor
+	 * Renderer constructor. The tileList used to paint the board is initialised here.
 	 */
 	public Renderer(Game game) {
 		for (int i = 0; i < 35; i++) {
@@ -65,7 +65,17 @@ public class Renderer {
 					iPos++;
 				}
 				
+				if (game.isOnInfo()) {
+					g.drawRect(180, 310, 180, 100);
+					g.setColor(Color.WHITE);
+					g.fillRect(180, 310, 180, 100);
+					g.setColor(Color.BLACK);
+					g.setFont(g.getFont().deriveFont(15f));
+					g.drawString(game.getInfo(), 235, 330);
+				}
+				
 			}
+			
 		};
 		
 	}
