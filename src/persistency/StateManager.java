@@ -81,8 +81,8 @@ public class StateManager {
 			String level = element.getElementsByTagName("Level").item(0).getTextContent();
 			String time = element.getElementsByTagName("Time").item(0).getTextContent();
 			
-			String[] maze = new String[25];
-			for(int row = 0; row < 25; ++row) {
+			String[] maze = new String[35];
+			for(int row = 0; row < 35; ++row) {
 				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
 			}
 			
@@ -124,8 +124,8 @@ public class StateManager {
 			String level = element.getElementsByTagName("Level").item(0).getTextContent();
 			String time = element.getElementsByTagName("Time").item(0).getTextContent();
 			
-			String[] maze = new String[25];
-			for(int row = 0; row < 25; ++row) {
+			String[] maze = new String[35];
+			for(int row = 0; row < 35; ++row) {
 				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
 			}
 			
@@ -177,7 +177,7 @@ public class StateManager {
 			writer.write("	<Time>" + game.getTime() + "</Time>\n");
 			
 			String[] maze = game.toString().split("\n");
-			for(int row = 0; row < 25; ++row) {
+			for(int row = 0; row < 35; ++row) {
 				writer.write("	<Row>");
 					writer.write(maze[row]);
 				writer.write("</Row>\n");
