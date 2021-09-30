@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.TreeMap;
 
+import javax.swing.JFileChooser;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,9 +23,12 @@ public class StateManager {
 	
 	private final TreeMap<Integer, State> levels;
 	
+	private final int levelNum;
+	
 	public StateManager() {
 		files = findFiles();
 		levels = createLevels();
+		levelNum = setLevel();
 	}
 	
 	private File[] findFiles() {
@@ -48,6 +52,59 @@ public class StateManager {
 		}
 		
 		return levelList;
+	}
+	
+	public State loadGame() {
+		File saved = new File("levels/saved.xml");
+		if(saved.isFile()) {
+			return loadState(saved);
+		}
+		else {
+			return loadState(levelNum);
+		}
+	}
+	
+	public State loadState(File file) {
+		
+		State state = null;
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		
+		try {
+			
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			Document doc = db.parse(file);
+			
+			Element element = doc.getDocumentElement();
+			
+			String level = element.getElementsByTagName("Level").item(0).getTextContent();
+			String time = element.getElementsByTagName("Time").item(0).getTextContent();
+			
+			String[] maze = new String[25];
+			for(int row = 0; row < 25; ++row) {
+				maze[row] = element.getElementsByTagName("Row").item(row).getTextContent();
+			}
+			
+			String x = element.getElementsByTagName("X").item(0).getTextContent();
+			String y = element.getElementsByTagName("Y").item(0).getTextContent();
+			String dir = element.getElementsByTagName("Dir").item(0).getTextContent();
+			String chips = element.getElementsByTagName("Chips").item(0).getTextContent();
+			
+			char direction = dir.charAt(0);
+			
+			int levelNum = Integer.parseInt(level);
+			int timeLeft = Integer.parseInt(time);
+			int xPos = Integer.parseInt(x);
+			int yPos = Integer.parseInt(y);
+			int chipsLeft = Integer.parseInt(chips);
+			
+			state = new State(levelNum, timeLeft, maze, xPos, yPos, direction, chipsLeft);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		return state;		
 	}
 	
 	public State loadState(int lvl) {
@@ -93,6 +150,21 @@ public class StateManager {
 		return state;		
 	}
 	
+	public State loadSelect() {
+		
+		State state = null;
+		
+		JFileChooser j = new JFileChooser("levels");
+		
+		int r = j.showOpenDialog(null);
+		
+		if (r == JFileChooser.APPROVE_OPTION) {
+			 state = loadState(j.getSelectedFile());
+		}
+		
+		return state;		
+	}
+	
 	public void SaveXML(Game game) {
 		try {
 			File saved = new File("levels/saved.xml");
@@ -123,7 +195,52 @@ public class StateManager {
 		}
 	}
 	
+	public void saveLevel(Game game) {
+		try {
+			File saved = new File("levels/init.xml");
+			saved.createNewFile();
+			
+			FileWriter writer = new FileWriter(saved);
+			writer.write("<?xml version = \"1.0\"?>\n");
+			writer.write("<Game>\n");
+			writer.write("	<Level>" + game.getLevel() + "</Level>\n");
+			writer.write("</Game>\n");
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int setLevel() {
+		
+		int lvl = 1;
+		
+		File init = new File("levels/init.xml");
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		
+		try {
+			
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			Document doc = db.parse(init);
+			
+			Element element = doc.getDocumentElement();
+			
+			String level = element.getElementsByTagName("Level").item(0).getTextContent();
+			
+			lvl = Integer.parseInt(level);
 
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+		return lvl;
+	}
+	
+	public void delete() {
+		File saved = new File("levels/saved.xml");
+		saved.delete();
+	}
 	
 	public TreeMap<Integer, State> getLevels() {
 		return levels;
