@@ -100,6 +100,8 @@ public class GUI extends WindowAdapter {
 		ActionListener timerAction = new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
+				game.moveBugs();
+				rend.update(game);
 				try {
 					design.update();
 				} catch (IOException e) {
