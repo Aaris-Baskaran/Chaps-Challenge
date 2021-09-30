@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 //import javax.lang.model.element.Element;
 import javax.swing.BorderFactory;
@@ -58,6 +59,12 @@ public class Recorder {
 	
 	private GUI gui;
 	
+	JButton speed = new JButton("x1");
+	
+	private int moveCount = 0;
+	
+	private long sleepTime = 1;
+	
 	public Recorder(GUI g) {
 		gui = g;
 	}
@@ -76,7 +83,7 @@ public class Recorder {
 		// Change Arraylist of moves into XML file
 		System.out.print(totalMoves);
 		writeXmlFile(moves);
-		moves.clear();
+		//moves.clear();
 	}
 	
 	public void writeXmlFile(ArrayList<String> list) {
@@ -97,35 +104,6 @@ public class Recorder {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//	        DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
-//	        DocumentBuilder build;
-//			try {
-//				build = dFact.newDocumentBuilder();
-//			
-//	        Document doc = build.newDocument();
-//	        Element moves = doc.createElement("Moves");
-//	        for (String s : list) {
-//	            Element move = doc.createElement(s);
-//	            
-//	            moves.appendChild(move);
-//	        }
-//	        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//	         Transformer OptimusPrime = transformerFactory.newTransformer();
-//	         DOMSource source = new DOMSource(doc);
-//	         StreamResult result = new StreamResult(new File("previousGame/PreviousGame.xml"));
-//	         OptimusPrime.transform(source, result);
-//	         
-//	         // Output to console for testing
-//	         StreamResult consoleResult = new StreamResult(System.out);
-//	         OptimusPrime.transform(source, consoleResult);
-//			} catch (ParserConfigurationException e) {
-//				e.printStackTrace();
-//			} catch (TransformerConfigurationException e) {
-//				e.printStackTrace();
-//			} catch (TransformerException e) {
-//				e.printStackTrace();
-//			}
-//	       
 	       
 	}
 	
@@ -152,8 +130,10 @@ public class Recorder {
 		replayPanel.setPreferredSize(new Dimension(840,45));
 		JButton stepByStep = new JButton("Step by Step");
 		JButton autoReplay = new JButton("Auto Replay");
-		JButton speed = new JButton("x1");
 		
+		stepByStep.addActionListener((event) -> moveStepByStep());
+		autoReplay.addActionListener((event) -> autoReplay());
+		speed.addActionListener((event) -> setSpeed());
 		replayPanel.add(stepByStep);
 		replayPanel.add(autoReplay);
 		replayPanel.add(speed);
@@ -161,9 +141,85 @@ public class Recorder {
 		
 	}
 	
+	private void moveStepByStep() {
+		System.out.println("step");
+		System.out.println( moves.size());
+		if(moveCount < moves.size()) {
+			System.out.println( moveCount);
+			if(moves.get(moveCount).equals("up")) {
+				gui.move('u');
+				System.out.println('u');
+			}
+			if(moves.get(moveCount).equals("down")) {
+				gui.move('d');
+				System.out.println('d');
+			}
+			if(moves.get(moveCount).equals("left")) {
+				gui.move('l');
+				System.out.println('l');
+			}
+			if(moves.get(moveCount).equals("right")) {
+				gui.move('r');
+				System.out.println('r');
+			}
+		}
+		moveCount++;
+	}
+	
+	private void autoReplay() {
+		System.out.println("auto");
+		for(String s :moves) {
+			if(s.equals("up")) {
+				gui.move('u');
+				System.out.println(s);
+			}
+			if(s.equals("down")) {
+				gui.move('d');
+				System.out.println(s);
+			}
+			if(s.equals("left")) {
+				gui.move('l');
+				System.out.println(s);
+			}
+			if(s.equals("right")) {
+				gui.move('r');
+				System.out.println(s);
+			}
+			try {
+				TimeUnit.SECONDS.sleep(sleepTime);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	private int setSpeed() {
+		if(speed.getText()=="x1") {
+			speed.setText("x2");
+			sleepTime = (long) 0.5;;
+			System.out.println(sleepTime);
+			return 1;
+		}else
+		if(speed.getText()=="x2") {
+			speed.setText("x4");
+			sleepTime = (long) 0.25;
+			System.out.println(sleepTime);
+			return 1;
+		}else
+		if(speed.getText()=="x4") {
+			speed.setText("x1");
+			sleepTime = 1;
+			System.out.println(sleepTime);
+			return 1;
+		}
+		System.out.println(sleepTime);
+		return 1;
+	}
+
 	public static int getTotalMoves() {
 		return totalMoves;
 	}
+	
 	public static void setTotalMoves(int totalMoves) {
 		Recorder.totalMoves = totalMoves;
 	}
