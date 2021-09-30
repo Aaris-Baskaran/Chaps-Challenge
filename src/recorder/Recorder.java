@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 
 import app.GUI;
+import domain.Game;
 import persistency.StateManager;
 
 /**
@@ -79,35 +80,52 @@ public class Recorder {
 	}
 	
 	public void writeXmlFile(ArrayList<String> list) {
-	        DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
-	        DocumentBuilder build;
-			try {
-				build = dFact.newDocumentBuilder();
+		try {
+			File saved = new File("previousGame/PreviousGame.xml");
+			saved.createNewFile();
 			
-	        Document doc = build.newDocument();
-	        Element moves = doc.createElement("Moves");
-	        for (String s : list) {
-	            Element move = doc.createElement(s);
-	            
-	            moves.appendChild(move);
-	        }
-	        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-	         Transformer OptimusPrime = transformerFactory.newTransformer();
-	         DOMSource source = new DOMSource(doc);
-	         StreamResult result = new StreamResult(new File("previousGame/PreviousGame.xml"));
-	         OptimusPrime.transform(source, result);
-	         
-	         // Output to console for testing
-	         StreamResult consoleResult = new StreamResult(System.out);
-	         OptimusPrime.transform(source, consoleResult);
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (TransformerConfigurationException e) {
-				e.printStackTrace();
-			} catch (TransformerException e) {
-				e.printStackTrace();
+			FileWriter writer = new FileWriter(saved);
+			writer.write("<?xml version = \"1.0\"?>\n");
+			writer.write("<Moves>\n");
+			
+			for(String s : moves) {
+				writer.write("<Direction>");
+				writer.write(s+"</Direction>\n");
 			}
-	       
+			writer.write("</Moves>");
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//	        DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
+//	        DocumentBuilder build;
+//			try {
+//				build = dFact.newDocumentBuilder();
+//			
+//	        Document doc = build.newDocument();
+//	        Element moves = doc.createElement("Moves");
+//	        for (String s : list) {
+//	            Element move = doc.createElement(s);
+//	            
+//	            moves.appendChild(move);
+//	        }
+//	        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//	         Transformer OptimusPrime = transformerFactory.newTransformer();
+//	         DOMSource source = new DOMSource(doc);
+//	         StreamResult result = new StreamResult(new File("previousGame/PreviousGame.xml"));
+//	         OptimusPrime.transform(source, result);
+//	         
+//	         // Output to console for testing
+//	         StreamResult consoleResult = new StreamResult(System.out);
+//	         OptimusPrime.transform(source, consoleResult);
+//			} catch (ParserConfigurationException e) {
+//				e.printStackTrace();
+//			} catch (TransformerConfigurationException e) {
+//				e.printStackTrace();
+//			} catch (TransformerException e) {
+//				e.printStackTrace();
+//			}
+//	       
 	       
 	}
 	
