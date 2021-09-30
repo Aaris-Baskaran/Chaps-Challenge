@@ -38,8 +38,11 @@ import renderer.Renderer;
  */
 public class GUI extends WindowAdapter {
 	public StateManager manager = new StateManager();
-	public Recorder record = new Recorder();
+
+	public Recorder record = new Recorder(this);	
+
 	public Game game = new Game(manager.getLevels().get(1));
+
 	public Renderer rend = new Renderer(game);
 	public Design design = new Design(game, manager);
 
@@ -193,12 +196,14 @@ public class GUI extends WindowAdapter {
 	}
 
 	private void createRecorderPanel() {
-		record.replayRecordedGame();
 
+		
+
+		recorderPanel=record.replayRecordedGame();
 		recorderPanel.setBackground(bg);
 		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
 		recorderPanel.setPreferredSize(new Dimension(840, 100));
-
+		
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
 
