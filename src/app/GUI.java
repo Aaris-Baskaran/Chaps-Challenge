@@ -101,7 +101,7 @@ public class GUI extends WindowAdapter {
 
 			public void actionPerformed(ActionEvent ae) {
 				game.moveBugs();
-				rend.update(game);
+				rend.updateBoard(game);
 				try {
 					design.update();
 				} catch (IOException e) {

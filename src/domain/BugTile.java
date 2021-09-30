@@ -14,11 +14,12 @@ public class BugTile extends Tile{
 	private boolean direction;
 
 	/**
-	 * other moving things can move onto bug tiles.
+	 * Constructor.
 	 */
 	public BugTile(char t) {
 		type = t;
-		canMove = true;
+		direction = true;
+		canMove = false;
 	}
 
 	/**
@@ -30,30 +31,36 @@ public class BugTile extends Tile{
 	public Image getImage() {
 		char dir = Game.getBugDirection();
 
-		//check direction first
-		if(dir == 'u'){
-			return getImage("BugFacingUpTile.png");
+		if (type == 'h'){
+			if(direction){
+				return getImage("BugFacingLeftTile.png");
+			}
+			else {
+				return getImage("BugFacingRightTile.png");
+			}
 		}
-		else if (dir == 'd'){
-			return getImage("BugFacingDownTile.png");
+		else{
+			if(direction){
+				return getImage("BugFacingUpTile.png");
+			}
+			else {
+				return getImage("BugFacingDownTile.png");
+			}
 		}
-		else if (dir == 'l'){
-			return getImage("BugFacingLeftTile.png");
-		}
-		else {
-			return getImage("BugFacingRightTile.png");
-		}
+
 	}
 
 	public boolean getDirection() {
 		return direction;
 	}
 
-	public void setDirection(){
+	public void toggleDirection(){
 		if (direction){
 			direction = false;
 		}
-		direction = true;
+		else{
+			direction = true;
+		}
 	}
 
 	public char getType() {
