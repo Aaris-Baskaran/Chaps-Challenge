@@ -2,6 +2,8 @@ package recorder;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -10,7 +12,9 @@ import java.util.concurrent.TimeUnit;
 //import javax.lang.model.element.Element;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 //import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,10 +67,20 @@ public class Recorder {
 	
 	private int moveCount = 0;
 	
-	private long sleepTime = 1;
+	private long sleepTime = 1000;
+	private Timer timer; 
 	
 	public Recorder(GUI g) {
 		gui = g;
+		ActionListener timerAction = new ActionListener() {
+
+			public void actionPerformed(ActionEvent ae) {
+				autoReplay();
+			}
+		};
+		timer = new Timer((int)sleepTime, timerAction);// create the timer which calls the actionperformed method for every second
+		timer.start();// start the task
+
 	}
 	/*
 	 * Method that gets called by the GUI to add a step to the list.
@@ -142,25 +156,22 @@ public class Recorder {
 	}
 	
 	private void moveStepByStep() {
-		System.out.println("step");
-		System.out.println( moves.size());
 		if(moveCount < moves.size()) {
-			System.out.println( moveCount);
 			if(moves.get(moveCount).equals("up")) {
 				gui.move('u');
-				System.out.println('u');
+				
 			}
 			if(moves.get(moveCount).equals("down")) {
 				gui.move('d');
-				System.out.println('d');
+				
 			}
 			if(moves.get(moveCount).equals("left")) {
 				gui.move('l');
-				System.out.println('l');
+		
 			}
 			if(moves.get(moveCount).equals("right")) {
 				gui.move('r');
-				System.out.println('r');
+			
 			}
 		}
 		moveCount++;
@@ -186,7 +197,7 @@ public class Recorder {
 				System.out.println(s);
 			}
 			try {
-				TimeUnit.SECONDS.sleep(sleepTime);
+				TimeUnit.MILLISECONDS.sleep(sleepTime);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -196,19 +207,19 @@ public class Recorder {
 	private int setSpeed() {
 		if(speed.getText()=="x1") {
 			speed.setText("x2");
-			sleepTime = (long) 0.5;;
+			sleepTime = 500;
 			System.out.println(sleepTime);
 			return 1;
 		}else
 		if(speed.getText()=="x2") {
 			speed.setText("x4");
-			sleepTime = (long) 0.25;
+			sleepTime = 250;
 			System.out.println(sleepTime);
 			return 1;
 		}else
 		if(speed.getText()=="x4") {
 			speed.setText("x1");
-			sleepTime = 1;
+			sleepTime = 1000;
 			System.out.println(sleepTime);
 			return 1;
 		}
