@@ -142,6 +142,10 @@ public class Game {
         //Reset treasure chest and items chap has picked up
         treasureChest.clear();
         keys.clear();
+        
+        //Initialise chest and keys
+        initChest(state.getChipsInChest());
+        initKeys(state.getKeys());
 
         //reset vars
         finished = false;
@@ -207,6 +211,21 @@ public class Game {
     			char c = input[col].charAt(row);
     			maze[row][col] = createTile(c);
     		}
+    	}
+    }
+    
+    private void initKeys(String input) {
+    	if(input.length() == 0) return;
+    	for(int i = 0; i < input.length(); ++i) {
+    		char c = input.charAt(i);
+    		keys.add((KeyTile) createTile(c));
+    	}
+    }
+    
+    private void initChest(int chips) {
+    	if(chips == 0) return;
+    	for(int i = 0; i < chips; ++i) {
+    		treasureChest.add(new ChipTile());
     	}
     }
 

@@ -13,12 +13,19 @@ import javax.swing.JPanel;
 
 /**
  * 
- * Class for the help frame when the help button is pressed
+ * Class to generate the the help frame when the help button is pressed
  * 
- * @author brook
+ * @author Stelio Brooky, 300540333
  *
  */
 
+
+
+/**
+ * 
+ * Constructor, genereate the panel and add it to a new frame.
+ *
+ */
 public class Help {
 
 	public JFrame frame = new JFrame();
@@ -46,6 +53,7 @@ public class Help {
 	}
 
 	private JPanel createPanel() {
+		//This class creates a new panle and displays all information on it.
 		JPanel p = new JPanel();
 
 		JLabel header = new JLabel("Help");

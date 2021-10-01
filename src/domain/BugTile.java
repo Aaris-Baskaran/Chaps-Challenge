@@ -4,9 +4,8 @@ import java.awt.*;
 
 /**
  * Represents the bug.
- * 
- * @author aarisbaskaran
  *
+ * @author aarisbaskaran
  */
 public class BugTile extends Tile{
 
@@ -29,7 +28,6 @@ public class BugTile extends Tile{
 	 */
 	@Override
 	public Image getImage() {
-		char dir = Game.getBugDirection();
 
 		if (type == 'h'){
 			if(direction){
@@ -65,5 +63,11 @@ public class BugTile extends Tile{
 
 	public char getType() {
 		return type;
+	}
+	
+	@Override
+	public String toString() {
+		if(type == 'h') return "B";
+		return "b";
 	}
 }
