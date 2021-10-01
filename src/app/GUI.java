@@ -163,7 +163,7 @@ public class GUI extends WindowAdapter {
 	private void createMenuBar() {
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem saveItem = new JMenuItem("Save and Quit");
-		saveItem.addActionListener((event) -> manager.SaveXML(game));
+		saveItem.addActionListener((event) -> manager.saveState(game));
 		saveItem.addActionListener((event) -> System.exit(0));
 		saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
 		JMenuItem loadItem = new JMenuItem("Load Saved Game");
@@ -434,7 +434,7 @@ public class GUI extends WindowAdapter {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			manager.SaveXML(game);
+			manager.saveState(game);
 			System.exit(0);
 		}
 	}
