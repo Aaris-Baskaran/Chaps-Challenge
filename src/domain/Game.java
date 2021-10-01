@@ -713,11 +713,14 @@ public class Game {
      * @return info
      */
     public String getInfo() {
-        if (level == 0){
+        if (level == 1){
             return "Take the RIGHT path for the Yellow Key\n" +
                     "Take the wrong path to get the chips";
         }
-        return "Level 2 info";
+        return "Here you stand, stuck on what to do\n" +
+                "before you enter the void, find\n" +
+                "that which is blue\n" +
+                "(Notice how that riddle rhymes :D";
     }
 
     /**
