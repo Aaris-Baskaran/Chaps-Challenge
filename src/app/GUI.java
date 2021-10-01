@@ -12,7 +12,6 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -33,7 +32,7 @@ import renderer.Renderer;
 /**
  * Graphic User Interface Class
  * 
- * @author Stelio Brooky
+ * @author Stelio Brooky, 300540333
  *
  */
 public class GUI extends WindowAdapter {
@@ -71,7 +70,9 @@ public class GUI extends WindowAdapter {
 	Action ctrl2Action;
 
 	/**
-	 * Constructor
+	 * 
+	 * Constructor, Constructs the board using helper methods and initiates the
+	 * timer.
 	 * 
 	 * @throws IOException
 	 */
@@ -99,11 +100,14 @@ public class GUI extends WindowAdapter {
 
 		ActionListener timerAction = new ActionListener() {
 
+			/**
+			 * Perform the timer functionality under certain conditions
+			 */
 			public void actionPerformed(ActionEvent ae) {
 				if (game.getLevel() == 2) {
 					game.moveBugs();
 				}
-				if(game.isDead()) {
+				if (game.isDead()) {
 					design.isPaused = true;
 					JOptionPane.showMessageDialog(designPanel, "You got hit by a bug, level will restart");
 					if (game.getLevel() == 1) {
@@ -129,7 +133,7 @@ public class GUI extends WindowAdapter {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				if (game.time < 1) {
 					design.isPaused = true;
 					JOptionPane.showMessageDialog(designPanel, "Time ran out, Level will restart");
@@ -161,6 +165,7 @@ public class GUI extends WindowAdapter {
 	}
 
 	private void createMenuBar() {
+		// create the file option
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem saveItem = new JMenuItem("Save and Quit");
 		saveItem.addActionListener((event) -> manager.saveState(game));
@@ -172,28 +177,33 @@ public class GUI extends WindowAdapter {
 		exitItem.addActionListener((event) -> System.exit(0));
 		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
 
+		// create the recorder option
 		JMenu recordMenu = new JMenu("Record");
 		JMenuItem recordGame = new JMenuItem("Record and store this game");
 		recordGame.addActionListener((event) -> record.recordGame());
 		JMenuItem loadRecordedGame = new JMenuItem("Load the previous recorded game");
 		loadRecordedGame.addActionListener((event) -> record.loadRecordedGame());
 
+		// create the replay option
 		JMenu replayMenu = new JMenu("Replay");
 		JMenuItem replayGame = new JMenuItem("Replay the recorded game");
 		replayGame.addActionListener((event) -> createRecorderPanel());
+
+		// create the level select option
 		JMenu levelMenu = new JMenu("Level");
 		JMenuItem level1Item = new JMenuItem("Load Level 1");
 		level1Item.addActionListener((event) -> ctrl1Action.actionPerformed(event));
 		level1Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK));
-
 		JMenuItem level2Item = new JMenuItem("Load Level 2");
 		level2Item.addActionListener((event) -> ctrl2Action.actionPerformed(event));
 		level2Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, KeyEvent.CTRL_DOWN_MASK));
 
+		// create the generate help menu option
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem helpItem = new JMenuItem("See game instructions and controls");
 		helpItem.addActionListener((event) -> design.createHelp());
 
+		// add them all to the menu bar and then add the menu bar to the frame
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);
 		fileMenu.add(exitItem);
@@ -217,16 +227,13 @@ public class GUI extends WindowAdapter {
 	}
 
 	private void createRecorderPanel() {
-
+		// Create the panel that the replay functionality needs
 		recorderPanel = record.replayRecordedGame();
 		if (game.getLevel() == 1) {
 			game.loadLevel(manager.getLevels().get(1));
 		} else {
 			game.loadLevel(manager.getLevels().get(2));
 		}
-		recorderPanel.setBackground(bg);
-		recorderPanel.setBorder(BorderFactory.createLineBorder(border, 2));
-		recorderPanel.setPreferredSize(new Dimension(840, 100));
 
 		frame.add(recorderPanel, BorderLayout.SOUTH);
 		frame.pack();
@@ -234,7 +241,9 @@ public class GUI extends WindowAdapter {
 	}
 
 	/**
-	 * i like to move it move it
+	 * 
+	 * The move class, which is used to recognize when the player has moved. This is
+	 * used for key bindings and the replay functionality for the recorder
 	 * 
 	 * @param dir
 	 */
@@ -272,6 +281,10 @@ public class GUI extends WindowAdapter {
 
 	}
 
+	/**
+	 * Creates the window pop up when someone wishes to close with the X button on the top of the frame
+	 * 
+	 */
 	public void windowClosing(WindowEvent e) {
 		int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you would like to exit?");
 		if (confirm == JOptionPane.YES_OPTION) {
@@ -335,13 +348,24 @@ public class GUI extends WindowAdapter {
 	}
 
 	// Key Binding Classes
+	
+	/**
+	 * 
+	 * Key binding class used to represent the up arrow key
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class UpAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
@@ -350,14 +374,24 @@ public class GUI extends WindowAdapter {
 			}
 		}
 	}
-
+	
+	/**
+	 * 
+	 * Key binding class used to represent the down arrow key
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class DownAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
@@ -367,13 +401,23 @@ public class GUI extends WindowAdapter {
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the left arrow key
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class LeftAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
@@ -382,14 +426,24 @@ public class GUI extends WindowAdapter {
 			}
 		}
 	}
-
+	
+	/**
+	 * 
+	 * Key binding class used to represent the right arrow key
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class RightAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!design.isPaused) {
@@ -399,53 +453,93 @@ public class GUI extends WindowAdapter {
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the spacebar
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class SpaceAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			design.isPaused = true;
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the escape key
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class EscAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			design.isPaused = false;
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the Control-S combination
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class CtrlSAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			manager.saveState(game);
 			System.exit(0);
 		}
 	}
-
+	
+	/**
+	 * 
+	 * Key binding class used to represent the Control-X combination
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class CtrlXAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			manager.delete();
@@ -454,26 +548,46 @@ public class GUI extends WindowAdapter {
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the Control-R combination
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class CtrlRAction extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.loadLevel(manager.loadSelect());
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the Control-1 combination
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class Ctrl1Action extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * The action method that runs when the key is clicked
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			game.loadLevel(manager.getLevels().get(1));
@@ -486,10 +600,17 @@ public class GUI extends WindowAdapter {
 		}
 	}
 
+	/**
+	 * 
+	 * Key binding class used to represent the Control-2 combination
+	 * 
+	 * @author Stelio Brooky, 300540333
+	 *
+	 */
 	public class Ctrl2Action extends AbstractAction {
 
 		/**
-		 * 
+		 * a universal version identifier for the serialization
 		 */
 		private static final long serialVersionUID = 1L;
 

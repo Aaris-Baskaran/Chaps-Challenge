@@ -23,7 +23,7 @@ import persistency.StateManager;
  * This is a class designated to creating the design window (where all the info
  * and buttons are) for the GUI to use.
  * 
- * @author Stelio Brooky
+ * @author Stelio Brooky, 300540333
  *
  */
 public class Design {
@@ -69,10 +69,10 @@ public class Design {
 
 		// Implement the Logo panel
 		BufferedImage img = ImageIO.read(new File("Logo.jpg"));
-		JLabel picLabel = new JLabel();
+		
 		Image scaledImg = img.getScaledInstance(300, 130, Image.SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(scaledImg);
-		picLabel = new JLabel(imageIcon);
+		JLabel picLabel = new JLabel(imageIcon);
 		picLabel.setBorder(BorderFactory.createLineBorder(border, 2));
 		design.add(picLabel);
 
@@ -166,6 +166,9 @@ public class Design {
 		return buttons;
 	}
 
+	/**
+	 * Method to create the help panel
+	 */
 	public void createHelp() {
 		if (isHelpActive) {
 			// Dispose so you can't open multiple help frames
@@ -175,6 +178,11 @@ public class Design {
 		helpFrame = new Help();
 	}
 
+	/**
+	 * Update the design panel every time it needs to change, update all info display.
+	 * 
+	 * @throws IOException
+	 */
 	public void update() throws IOException {
 		if (!game.getKeys().isEmpty()) {
 			String keys = "";

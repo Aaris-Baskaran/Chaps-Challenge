@@ -2,8 +2,12 @@ package fuzz;
 
 
 import app.GUI;
+import jdk.jfr.StackTrace;
 
 import java.time.Duration;
+import java.util.Random;
+import java.lang.IllegalArgumentException;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
@@ -31,6 +35,8 @@ public class FuzzTest {
 
 	private GUI gui; 
 	
+	private Random rand = new Random();
+	
 	
 	
 	private int upAction = KeyEvent.VK_UP;
@@ -46,48 +52,44 @@ public class FuzzTest {
 	private int ctrl1Action = 49; //To be combined with control int
 	private int ctrl2Action = 50; //To be combined with control int
 	
+	private int[] moves = new int[]{upAction, downAction, leftAction, rightAction};
+	
 	
 	
 	@Test
     public void test1() {
 		System.out.println("This is the test case 1 in this class for level 1");
-		try {
-			gui = new GUI();
-        	Robot robot = new Robot();
-        	assertTimeoutPreemptively( Duration.ofSeconds(60), () -> {
+		assertTimeoutPreemptively( Duration.ofSeconds(60), () -> {
+			try {
+				gui = new GUI();
         		Thread.sleep(2000);
-        		clickMultipleButtons(new int[]{control, ctrl1Action}, robot);
-        		int count = 0;
+        		clickMultipleButtons(new int[]{control, ctrl1Action});
     			while(true) {
-    				Thread.sleep(1000);
-    				System.out.println(count++);
+    				clickButton(getRandomMove());
+    				Thread.sleep(500);
     			}
-        	});
-        	
-        }
-        catch(IOException e) {
-        	//GUI not working
-        }
-        catch(AWTException e) {
-        	//Robot not working
-        }
-        catch(IllegalArgumentException e) {
-        	//A precondition violation
-//        	raiseIssue("", "");
-        }
-        catch(IllegalStateException e) {
-        	//A precondition violation
-//        	raiseIssue("", "");
-        }
-        catch(NullPointerException e) {
-        	//general programming error (issue where an object is null and is trying to be utilized)
-//        	raiseIssue("", "");
-        }
-        catch(AssertionError e) {
-        	//A postcondition violation determined by the asserts in the module code.
-//        	raiseIssue("", "");
-        }
-        
+	        }
+	        catch(IOException e) {   
+	        	String user = getRelevantUser(e.getStackTrace());
+	        	raiseIssue(user, "GUI Failed to initialize. When calling 'new GUI()' constructor and IOException is thrown in "+user+"'s module where "+e.getMessage());
+	        }
+	        catch(IllegalArgumentException e) {
+	        	String user = getRelevantUser(e.getStackTrace());
+	        	raiseIssue(user, "Precondition issue caught by an Illegal Argument Exception in "+user+"'s module where "+e.getMessage());
+	        }
+	        catch(IllegalStateException e) { 
+	        	String user = getRelevantUser(e.getStackTrace());
+	        	raiseIssue(user, "Precondition issue caught by an Illegal State Exception in "+user+"'s module where "+e.getMessage());
+	        }
+	        catch(NullPointerException e) {
+	        	String user = getRelevantUser(e.getStackTrace());
+	        	raiseIssue(user, "General Programming Error caught by a Null Pointer Exception in "+user+"'s module where "+e.getMessage());
+	        }
+	        catch(AssertionError e) {
+	        	String user = getRelevantUser(e.getStackTrace());
+	        	raiseIssue(user, "Postcondition violation caught by an AssertionError in "+user+"'s module where "+e.getMessage());
+	        }
+		});
         
     }
 	
@@ -95,55 +97,95 @@ public class FuzzTest {
     public void test2() { 
         System.out.println("This is the test case 2 in this class for level 2");
         try {
-        	Robot robot = new Robot();
         	assertTimeoutPreemptively( Duration.ofSeconds(60), () -> {
-        		clickMultipleButtons(new int[]{control, ctrl2Action}, robot);
-        		int count = 0;
+        		clickMultipleButtons(new int[]{control, ctrl2Action});
     			while(true) {
-    				Thread.sleep(1000);
-    				System.out.println(count++);
+    				clickButton(getRandomMove());
+    				Thread.sleep(500);
     			}
         	});
         	
         }
-        catch(AWTException e) {
-        	//Robot not working
-        }
         catch(IllegalArgumentException e) {
-        	//A precondition violation
-//        	raiseIssue("", "");
+        	String user = getRelevantUser(e.getStackTrace());
+        	raiseIssue(user, "Precondition issue caught by an Illegal Argument Exception in "+user+"'s module where "+e.getMessage());
         }
-        catch(IllegalStateException e) {
-        	//A precondition violation
-//        	raiseIssue("", "");
+        catch(IllegalStateException e) { 
+        	String user = getRelevantUser(e.getStackTrace());
+        	raiseIssue(user, "Precondition issue caught by an Illegal State Exception in "+user+"'s module where "+e.getMessage());
         }
         catch(NullPointerException e) {
-        	//general programming error (issue where an object is null and is trying to be utilized)
-//        	raiseIssue("", "");
+        	String user = getRelevantUser(e.getStackTrace());
+        	raiseIssue(user, "General Programming Error caught by a Null Pointer Exception in "+user+"'s module where "+e.getMessage());
         }
         catch(AssertionError e) {
-        	//A postcondition violation determined by the asserts in the module code.
-//        	raiseIssue("", "");
+        	String user = getRelevantUser(e.getStackTrace());
+        	raiseIssue(user, "Postcondition violation caught by an AssertionError in "+user+"'s module where "+e.getMessage());
         }
         
         
     }
 	
-	private void clickButton(int keyCode, Robot robot) {
-		robot.keyPress(keyCode);
-		robot.keyRelease(keyCode);
+	
+	//Determine username from the found package the issue is generated from
+	
+	private String getRelevantUser(StackTraceElement[] stack) {
+		switch (stack[0].getClassName().subSequence(0, 3).toString()) {
+		case "dom":
+			return "baskaraari";
+		case "app":
+			return "brookystel";
+		case "rec":
+			return "nolanarno1";
+		case "per":
+			return "vuongkell";
+		case "ren":
+			return "puagevi";
+		}
+		return "edlinkale";
 	}
 	
-	private void clickMultipleButtons(int[] keyCodes, Robot robot) {
+	
+	
+	//Emulator helper methods for moving intelligently
+	
+	private void clickButton(int keyCode) {
+		gui.designPanel.dispatchEvent(keyPress(keyCode));
+		gui.designPanel.dispatchEvent(keyRelease(keyCode));
+		
+	}
+	
+	private void clickMultipleButtons(int[] keyCodes) {
 		for(int keyCode : keyCodes) {
-			robot.keyPress(keyCode);
+			gui.designPanel.dispatchEvent(keyPress(keyCode));
 		}
 		for(int keyCode : keyCodes) {
-			robot.keyRelease(keyCode);
+			gui.designPanel.dispatchEvent(keyRelease(keyCode));
 		}
 	}
 	
+	private void moveInDirection(int keyCode, Robot robot, int moves) {
+		for(int i = 0; i<moves; i++) {
+			clickButton(keyCode);
+		}
+	}
+	
+	private int getRandomMove() {
+		int index = rand.nextInt((3 - 0) + 1) + 0;
+		return moves[index];
+	}
+	
+	
+	private KeyEvent keyPress(int keyCode) {
+		return new KeyEvent(gui.designPanel, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, keyCode, 'a');
+	}
+	
+	private KeyEvent keyRelease(int keyCode) {
+		return new KeyEvent(gui.designPanel, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, keyCode, 'a');
+	}
 
+
+	
 	
 	
 	private void raiseIssue(String user, String title) {
